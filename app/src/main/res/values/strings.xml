@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Projekt</string>
+    <string name="menu1">Level 1</string>
+    <string name="menu2">Level 2</string>
+    <string name="menu3">Level 3</string>
+    <string name="menu4">Level 4</string>
 </resources>
