@@ -4,4 +4,8 @@
     <string name="menu2">Level 2</string>
     <string name="menu3">Level 3</string>
     <string name="menu4">Level 4</string>
+    <string name="empty" />
+    <string name="back">SPÄŤ</string>
+    <string name="verify">OVERIŤ</string>
+    <string name="reset1">Reset</string>
 </resources>

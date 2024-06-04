@@ -8,64 +8,115 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button12"
-        style="?android:attr/buttonBarButtonStyle"
+        android:id="@+id/button1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
+        android:backgroundTint="#00FF00"
+        android:insetLeft="6dp"
+        android:insetTop="6dp"
+        android:insetRight="6dp"
+        android:insetBottom="6dp"
         android:text="@string/menu1"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button11"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toStartOf="@+id/button11"
+        app:layout_constraintEnd_toStartOf="@+id/button2"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/button11"
-        style="?android:attr/buttonBarButtonStyle"
+        android:id="@+id/button2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:backgroundTint="#F44336"
+        android:insetRight="6dp"
         android:text="@string/menu2"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button12"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/button1"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck"
+        android:enabled="false" />
 
     <Button
-        android:id="@+id/button10"
-        style="?android:attr/buttonBarButtonStyle"
+        android:id="@+id/button3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@string/menu4"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button9"
-        app:layout_constraintTop_toBottomOf="@+id/button12" />
-
-    <Button
-        android:id="@+id/button9"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:backgroundTint="#F44336"
+        android:insetLeft="6dp"
+        android:insetRight="6dp"
         android:text="@string/menu3"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button4"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button10"
+        app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextContrastCheck"
+        android:enabled="false" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="#F44336"
+        android:insetRight="6dp"
+        android:text="@string/menu4"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button3"
+        app:layout_constraintTop_toBottomOf="@+id/button1"
+        tools:ignore="TextContrastCheck"
+        android:enabled="false" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.8" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="112dp"
+        android:layout_weight="0.2"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3">
+
+        <Button
+            android:id="@+id/button11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:backgroundTint="#00FF00"
+            android:insetLeft="6dp"
+            android:insetTop="6dp"
+            android:insetRight="6dp"
+            android:insetBottom="6dp"
+            android:text="@string/reset1"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
