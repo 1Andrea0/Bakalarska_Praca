@@ -42,6 +42,8 @@ class LevelTwoActivity : AppCompatActivity() {
         val graphView = findViewById<GraphView>(R.id.graphView)
         val starView = findViewById<StarRatingView>(R.id.starView)
 
+        var clickCount = 0
+
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
 //        graphView = GraphView(this)
 
@@ -63,11 +65,15 @@ class LevelTwoActivity : AppCompatActivity() {
         val buttonRed = findViewById<Button>(R.id.button5)
 
         buttonBlue.setOnClickListener {
+            if (clickCount<10)
             textView.text = textView.text.toString() + "M"
+            clickCount++
         }
 
         buttonRed.setOnClickListener {
+            if (clickCount<10)
             textView.text = textView.text.toString() + "Č"
+            clickCount++
         }
 
 //        val commands = listOf("Č", "M", "ČM", "MČ", "MM", "ČM", "MČ", "ČČ", "ČMM", "MČM")
@@ -76,12 +82,17 @@ class LevelTwoActivity : AppCompatActivity() {
 
         Log.d("DEBUG", "$currentIndex1,$currentIndex2,$currentIndex3,$idea")
 
+        binding.button6.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
         verify.setOnClickListener {
             if (viewModel.verify3(currentIndex1,currentIndex2,currentIndex3,textView.text.toString().toList())) {
 //                val levelIndex = viewModel.nextLevel()
 //                Log.d("DEBUG", "PODARILO SA,$levelIndex")
 
                 val levelIndex = viewModel.nextLevel()
+                clickCount = 0
                 if (levelIndex == 2) {
                     Log.d("DEBUG", "VSETKO")
                     viewModel.nextStage()

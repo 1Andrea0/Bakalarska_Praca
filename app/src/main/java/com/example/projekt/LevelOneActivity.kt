@@ -55,7 +55,6 @@ class LevelOneActivity : AppCompatActivity() {
         val graphView = findViewById<GraphView>(R.id.graphView)
         val starView = findViewById<StarRatingView>(R.id.starView)
 
-
         square1.text = options[currentIndex1]
         square2.text = options[currentIndex2]
         square3.text = options[currentIndex3]
@@ -87,6 +86,10 @@ class LevelOneActivity : AppCompatActivity() {
             graphView.redArrowPoints = viewModel.redArrowPoints
             graphView.blueArrowPoints = viewModel.blueArrowPoints
             graphView.setNumVertices(4)
+        }
+
+        binding.button6.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
         }
 
         verify.setOnClickListener {

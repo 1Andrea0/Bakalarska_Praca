@@ -149,7 +149,7 @@ class ViewModel : ViewModel() {
         for (c in command) {
             if (c == 'M') {
                 for (i in result.indices) {
-                    if (result[i].second == blueArrowPoints[i].first) {
+                    if (result[i].second == blueArrowPoints[result[i].second].first) {
                         val updatedPair = Pair(result[i].first, blueArrowPoints[i].second)
                         result[i] = updatedPair
                     }
@@ -157,7 +157,7 @@ class ViewModel : ViewModel() {
             }
             if (c == 'Č') {
                 for (i in result.indices) {
-                    if (result[i].second == redArrowPoints[i].first) {
+                    if (result[i].second == redArrowPoints[result[i].second].first) {
                         val updatedPair = Pair(result[i].first, redArrowPoints[i].second)
                         result[i] = updatedPair
                     }
@@ -188,7 +188,7 @@ class ViewModel : ViewModel() {
         for (c in command) {
             if (c == 'M') {
                 for (i in result.indices) {
-                    if (result[i].second == blueArrowPoints[i].first) {
+                    if (result[i].second == blueArrowPoints[result[i].second].first) {
                         val updatedPair = Pair(result[i].first, blueArrowPoints[i].second)
                         result[i] = updatedPair
                     }
@@ -196,7 +196,7 @@ class ViewModel : ViewModel() {
             }
             if (c == 'Č') {
                 for (i in result.indices) {
-                    if (result[i].second == redArrowPoints[i].first) {
+                    if (result[i].second == redArrowPoints[result[i].second].first) {
                         val updatedPair = Pair(result[i].first, redArrowPoints[i].second)
                         result[i] = updatedPair
                     }

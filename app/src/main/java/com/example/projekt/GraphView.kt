@@ -120,44 +120,67 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         }
 
         for (i in points.indices) {
-            drawArrow(canvas, points[redArrowPoints[i].first], points[redArrowPoints[i].second], redArrowPaint, 15f * (-1f).pow(i))
-            drawArrow(canvas, points[blueArrowPoints[i].first], points[blueArrowPoints[i].second], blueArrowPaint, -15f * (-1f).pow(i))
+            drawArrow(
+                canvas, points[redArrowPoints[i].first], points[redArrowPoints[i].second], redArrowPaint, redArrowPaint, 15f * (-1f).pow(i), 15f * (-1f).pow(i)
+            )
+            drawArrow(
+                canvas, points[blueArrowPoints[i].first], points[blueArrowPoints[i].second], blueArrowPaint, blueArrowPaint, -15f * (-1f).pow(i), 15f * (-1f).pow(i)
+            )
         }
-//        println("Red elements:")
-//        redArrowPoints.forEach { item ->
-//            println(item)
-//        }
-//        println("Blue elements:")
-//        blueArrowPoints.forEach { item ->
-//            println(item)
-//        }
     }
+
 
 //    private fun drawSquare(canvas: Canvas, x: Float, y: Float, size: Int) {
 //        val halfSize = size / 2
 //        canvas.drawRect(x - halfSize, y - halfSize, x + halfSize, y + halfSize, paint)
 //    }
 
-    private fun drawArrow(canvas: Canvas, start: PointF, end: PointF, arrowPaint: Paint, offsetY: Float) {
-        val angle = atan2((end.y - start.y).toDouble(), (end.x - start.x).toDouble())
-        val offset = PointF((squareSize / 2) * cos(angle).toFloat(), (squareSize / 2) * sin(angle).toFloat())
+    private fun drawArrow(
+        canvas: Canvas,
+        start: PointF,
+        end: PointF,
+        arrowPaint: Paint,
+        arrowHeadPaint: Paint,
+        offsetY: Float,
+        offsetX: Float
+    ) {
+        if (start == end) {
+            // Draw a loop (arc) for the same start and end points
+            val left = start.x - 50f
+            val top = start.y - 50f
+            val right = start.x + 50f
+            val bottom = start.y + 50f
+            val oval = RectF(left, top, right, bottom)
 
-        val adjustedStart = PointF(start.x + offset.x, start.y + offset.y)
-        val adjustedEnd = PointF(end.x - offset.x, end.y - offset.y)
+            // Draw the arc (loop)
+            canvas.drawArc(oval, 0f, 270f, false, arrowPaint)
+        } else {
+            val angle = atan2((end.y - start.y).toDouble(), (end.x - start.x).toDouble())
+            val offset = PointF((squareSize / 2) * cos(angle).toFloat(), (squareSize / 2) * sin(angle).toFloat())
 
-        // Apply perpendicular offset for non-overlapping
-        val perpendicularOffset = PointF(-offsetY * sin(angle).toFloat(), offsetY * cos(angle).toFloat())
-        val finalStart = PointF(adjustedStart.x + perpendicularOffset.x, adjustedStart.y + perpendicularOffset.y)
-        val finalEnd = PointF(adjustedEnd.x + perpendicularOffset.x, adjustedEnd.y + perpendicularOffset.y)
+            val adjustedStart = PointF(start.x + offset.x, start.y + offset.y)
+            val adjustedEnd = PointF(end.x - offset.x, end.y - offset.y)
 
-        canvas.drawLine(finalStart.x, finalStart.y, finalEnd.x, finalEnd.y, arrowPaint)
+            // Apply perpendicular offset for non-overlapping
+            val perpendicularOffset = PointF(
+                -offsetY * sin(angle).toFloat() + offsetX * cos(angle).toFloat(),
+                offsetY * cos(angle).toFloat() + offsetX * sin(angle).toFloat()
+            )
+            val finalStart = PointF(adjustedStart.x + perpendicularOffset.x, adjustedStart.y + perpendicularOffset.y)
+            val finalEnd = PointF(adjustedEnd.x + perpendicularOffset.x, adjustedEnd.y + perpendicularOffset.y)
 
-        val arrowEndAngle = atan2((finalEnd.y - finalStart.y).toDouble(), (finalEnd.x - finalStart.x).toDouble())
-        val x1 = finalEnd.x - arrowHeadLength * cos(arrowEndAngle + arrowAngle).toFloat()
-        val y1 = finalEnd.y - arrowHeadLength * sin(arrowEndAngle + arrowAngle).toFloat()
-        val x2 = finalEnd.x - arrowHeadLength * cos(arrowEndAngle - arrowAngle).toFloat()
-        val y2 = finalEnd.y - arrowHeadLength * sin(arrowEndAngle - arrowAngle).toFloat()
-        canvas.drawLine(finalEnd.x, finalEnd.y, x1, y1, redArrowPaint)
-        canvas.drawLine(finalEnd.x, finalEnd.y, x2, y2, blueArrowPaint)
+            canvas.drawLine(finalStart.x, finalStart.y, finalEnd.x, finalEnd.y, arrowPaint)
+
+            val arrowEndAngle = atan2((finalEnd.y - finalStart.y).toDouble(), (finalEnd.x - finalStart.x).toDouble())
+            val x1 = finalEnd.x - arrowHeadLength * cos(arrowEndAngle + arrowAngle).toFloat()
+            val y1 = finalEnd.y - arrowHeadLength * sin(arrowEndAngle + arrowAngle).toFloat()
+            val x2 = finalEnd.x - arrowHeadLength * cos(arrowEndAngle - arrowAngle).toFloat()
+            val y2 = finalEnd.y - arrowHeadLength * sin(arrowEndAngle - arrowAngle).toFloat()
+
+            canvas.drawLine(finalEnd.x, finalEnd.y, x1, y1, arrowHeadPaint)
+            canvas.drawLine(finalEnd.x, finalEnd.y, x2, y2, arrowHeadPaint)
+        }
     }
+
+
 }
