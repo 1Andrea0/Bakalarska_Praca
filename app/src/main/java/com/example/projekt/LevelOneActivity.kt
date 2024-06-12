@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -44,6 +45,7 @@ class LevelOneActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         prefs = getSharedPreferences("button_prefs", MODE_PRIVATE)
+        var clickCount = 0
 
         val square1 = findViewById<Button>(R.id.button11)
         val square2 = findViewById<Button>(R.id.button12)
@@ -79,13 +81,22 @@ class LevelOneActivity : AppCompatActivity() {
         text.text = viewModel.getCommand()
         graphView.setNumVertices(3)
 
-        if (prefs.getBoolean("levelThree", false)) {
+        if (prefs.getBoolean("levelThree", false) && (prefs.getBoolean("levelOne", true))) {
             addFourthButton()
             options.add(3,"D")
             viewModel.addFour()
             graphView.redArrowPoints = viewModel.redArrowPoints
             graphView.blueArrowPoints = viewModel.blueArrowPoints
             graphView.setNumVertices(4)
+            Log.d("DEBUG", "$clickCount")
+            if (clickCount > 5) {
+                addFourthButton()
+                options.add(4,"E")
+                viewModel.addFive()
+                graphView.redArrowPoints = viewModel.redArrowPoints
+                graphView.blueArrowPoints = viewModel.blueArrowPoints
+                graphView.setNumVertices(5)
+            }
         }
 
         binding.button6.setOnClickListener{
@@ -93,10 +104,12 @@ class LevelOneActivity : AppCompatActivity() {
         }
 
         verify.setOnClickListener {
+//            Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_LONG).show()
             if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3))) {
 //            Log.d("DEBUG", "PODARILO SA")
 
                 val levelIndex = viewModel.nextLevel()
+                clickCount = levelIndex
 //                Log.d("DEBUG", "$levelIndex")
 
                 if (levelIndex == 2) {
@@ -104,6 +117,8 @@ class LevelOneActivity : AppCompatActivity() {
 //                    viewModel.nextStage()
 
                     prefs.edit().putBoolean("button2", true).apply()
+//                    Log.d("DEBUG", "${prefs.all}")
+
                     startActivity(Intent(this, MainActivity::class.java))
                     viewModel.resetLevel()
                 }
@@ -137,6 +152,8 @@ class LevelOneActivity : AppCompatActivity() {
                 graphView.invalidate()
 
             } else {
+//                Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_SHORT).show()
                 Log.d("DEBUG", "NEPODARILO SA")
             }
         }

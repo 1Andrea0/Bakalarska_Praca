@@ -26,6 +26,11 @@ class MainActivity : AppCompatActivity() {
         prefs = getSharedPreferences("button_prefs", MODE_PRIVATE)
 
         updateButtonStates()
+        prefs.edit().putBoolean("levelThree", false).apply()
+        prefs.edit().putBoolean("levelFour", false).apply()
+
+        // Save data to SharedPreferences
+
 
 //        Log.d("SharedPreferences", "Button 1 value: ${prefs.getBoolean("button1", false)}")
 //        Log.d("SharedPreferences", "Button 2 value: ${prefs.getBoolean("button2", false)}")
@@ -50,28 +55,52 @@ class MainActivity : AppCompatActivity() {
            }
        }
 
-       binding.button4.setOnClickListener {
+        binding.button4.setOnClickListener {
            if (prefs.getBoolean("button4", false)) {
+               prefs.edit().putBoolean("levelFour", true).apply()
                startActivity(Intent(this, LevelTwoActivity::class.java))
            }
        }
 
         binding.button11.setOnClickListener {
-            prefs.edit().clear().apply()
-            updateButtonStates()
+//            val editor = prefs.edit()
+//            editor.putBoolean("button1", true)
+//            editor.putBoolean("button2", false)
+//            editor.putBoolean("button3", false)
+//            editor.putBoolean("button4", false)
+//            editor.putBoolean("levelThree", false)
+//            editor.putBoolean("levelFour", false)
+//            editor.putBoolean("first", false)
+//            editor.apply()
+//            prefs.edit().clear().apply()
+//            updateButtonStates()
+            createStates()
         }
+    }
+
+    private fun createStates() {
+        val editor = prefs.edit()
+        editor.putBoolean("button1", true)
+        editor.putBoolean("button2", false)
+        editor.putBoolean("button3", false)
+        editor.putBoolean("button4", false)
+        editor.putBoolean("levelThree", false)
+        editor.putBoolean("levelFour", false)
+        editor.apply()
+        updateButtonStates()
     }
 
     private fun updateButtonStates() {
         binding.button1.setBackgroundColor(Color.GREEN)
-        binding.button1.isEnabled = true
+        binding.button1.isEnabled = prefs.getBoolean("button1", true)
         binding.button2.setBackgroundColor(if (prefs.getBoolean("button2", false)) Color.GREEN else Color.RED)
         binding.button2.isEnabled = prefs.getBoolean("button2", false)
         binding.button3.setBackgroundColor(if (prefs.getBoolean("button3", false)) Color.GREEN else Color.RED)
         binding.button3.isEnabled = prefs.getBoolean("button3", false)
         binding.button4.setBackgroundColor(if (prefs.getBoolean("button4", false)) Color.GREEN else Color.RED)
         binding.button4.isEnabled = prefs.getBoolean("button4", false)
-        prefs.getBoolean("levelThree", false)
-        prefs.getBoolean("levelFour", false)
+//        prefs.getBoolean("levelThree", false)
+//        prefs.getBoolean("levelFour", false)
+//        Log.d("DEBUG", "${prefs.all}")
     }
 }

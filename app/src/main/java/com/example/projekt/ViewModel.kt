@@ -19,7 +19,7 @@ class ViewModel : ViewModel() {
     var graphs = listOf(listOf(Pair(0,1), Pair(1,2), Pair(2,0)),
         listOf(Pair(0,2), Pair(1,0), Pair(2,1)))
 
-    private val graphsLoop = listOf(listOf(Pair(0,0), Pair(1,2), Pair(2,1)),
+    private var graphsLoop = listOf(listOf(Pair(0,0), Pair(1,2), Pair(2,1)),
         listOf(Pair(0,2), Pair(1,1), Pair(2,0)),
         listOf(Pair(0,1), Pair(1,0), Pair(2,2)))
 
@@ -51,30 +51,164 @@ class ViewModel : ViewModel() {
     }
 
     fun addFour() {
-        graphs = listOf(listOf(Pair(0,0), Pair(1,3), Pair(2,1), Pair(3,2)),
-            listOf(Pair(0,1), Pair(1,0), Pair(2,3), Pair(3,2)),
-            listOf(Pair(0,1), Pair(1,2), Pair(2,0), Pair(3,3)),
+        graphs = listOf(listOf(Pair(0,1), Pair(1,0), Pair(2,3), Pair(3,2)),
             listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0)),
             listOf(Pair(0,1), Pair(1,3), Pair(2,0), Pair(3,2)),
-            listOf(Pair(0,1), Pair(1,3), Pair(2,2), Pair(3,0)),
-            listOf(Pair(0,2), Pair(1,0), Pair(2,1), Pair(3,3)),
             listOf(Pair(0,2), Pair(1,0), Pair(2,3), Pair(3,1)),
-            listOf(Pair(0,2), Pair(1,1), Pair(2,3), Pair(3,0)),
             listOf(Pair(0,2), Pair(1,3), Pair(2,0), Pair(3,1)),
             listOf(Pair(0,2), Pair(1,3), Pair(2,1), Pair(3,0)),
             listOf(Pair(0,3), Pair(1,0), Pair(2,1), Pair(3,2)),
-            listOf(Pair(0,3), Pair(1,0), Pair(2,2), Pair(3,1)),
-            listOf(Pair(0,3), Pair(1,1), Pair(2,0), Pair(3,2)),
             listOf(Pair(0,3), Pair(1,2), Pair(2,0), Pair(3,1)),
             listOf(Pair(0,3), Pair(1,2), Pair(2,1), Pair(3,0)))
 
+        graphsLoop = listOf(listOf(Pair(0,0), Pair(1,3), Pair(2,1), Pair(3,2)),
+            listOf(Pair(0,1), Pair(1,2), Pair(2,0), Pair(3,3)),
+            listOf(Pair(0,1), Pair(1,3), Pair(2,2), Pair(3,0)),
+            listOf(Pair(0,2), Pair(1,0), Pair(2,1), Pair(3,3)),
+            listOf(Pair(0,2), Pair(1,1), Pair(2,3), Pair(3,0)),
+            listOf(Pair(0,3), Pair(1,0), Pair(2,2), Pair(3,1)),
+            listOf(Pair(0,3), Pair(1,1), Pair(2,0), Pair(3,2)))
+
         redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
         blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
-//        Log.d("Graphs", "${graphs[0]}")
-//        Log.d("Graphs", "${graphs[1]}")
-//        Log.d("Graphs", "${graphs[2]}")
-//        Log.d("Graphs", "${graphs.size}")
+    }
 
+    fun addFive() {
+//        0,2,1,4,3
+//        0,2,3,4,1
+//        0,2,4,1,3
+//        0,3,1,4,2
+//        0,3,4,1,2
+//        0,3,4,2,1
+//        0,4,1,2,3
+//        0,4,3,1,2
+//        0,4,3,2,1
+//        1,0,2,4,3
+//        1,0,3,2,4
+//        1,0,4,3,2
+//        1,2,3,0,4
+//        1,2,4,3,0
+//        1,3,0,2,4
+//        1,3,2,4,0
+//        1,4,0,3,2
+//        1,4,2,0,3
+//        2,0,3,1,4
+//        2,0,4,3,1
+//        2,1,0,4,3
+//        2,1,3,4,0
+//        2,1,4,0,3
+//        2,3,0,1,4
+//        3,0,2,4,1
+//        3,0,1,2,4
+//        2,4,1,3,0
+//        2,4,0,3,1
+//        2,3,1,0,4
+//        3,1,0,4,2
+//        3,1,4,0,2
+//        3,1,4,2,0
+//        3,2,0,1,4
+//        3,2,1,0,4
+//        3,4,2,0,1
+//        3,4,2,1,0
+//        4,0,1,3,2
+//        4,0,2,1,3
+//        4,1,0,2,3
+//        4,1,3,0,2
+//        4,1,3,2,0
+//        4,2,0,3,1
+//        4,2,1,3,0
+//        4,3,2,0,1
+//        4,3,2,1,0
+        graphs = listOf(listOf(Pair(0,1), Pair(1,0), Pair(2,3), Pair(3,4), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,0), Pair(2,4), Pair(3,2), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,2), Pair(2,0), Pair(3,4), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,4), Pair(4,0)),
+            listOf(Pair(0,1), Pair(1,2), Pair(2,4), Pair(3,0), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,3), Pair(2,0), Pair(3,4), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,3), Pair(2,4), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,3), Pair(2,4), Pair(3,2), Pair(4,0)),
+            listOf(Pair(0,1), Pair(1,4), Pair(2,0), Pair(3,2), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,4), Pair(2,3), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,4), Pair(2,3), Pair(3,2), Pair(4,0)),
+            listOf(Pair(0,2), Pair(1,0), Pair(2,1), Pair(3,4), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,0), Pair(2,3), Pair(3,4), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,0), Pair(2,4), Pair(3,1), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,0), Pair(3,4), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,1), Pair(3,4), Pair(4,0)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,4), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,4), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,0), Pair(3,1), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,1), Pair(3,0), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,3), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,3), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,3), Pair(1,0), Pair(2,4), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,0), Pair(2,4), Pair(3,2), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,0), Pair(2,1), Pair(3,4), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,1), Pair(3,4), Pair(4,0)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,0), Pair(3,4), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,4), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,4), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,0), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,0), Pair(3,2), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,1), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,1), Pair(3,2), Pair(4,0)),
+            listOf(Pair(0,4), Pair(1,0), Pair(2,1), Pair(3,2), Pair(4,3)),
+            listOf(Pair(0,4), Pair(1,0), Pair(2,3), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,4), Pair(1,3), Pair(2,1), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,4), Pair(1,3), Pair(2,0), Pair(3,2), Pair(4,1)),
+            listOf(Pair(0,4), Pair(1,3), Pair(2,0), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,3), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,3), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,1), Pair(3,0), Pair(4,3)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,0), Pair(3,1), Pair(4,3)),
+            listOf(Pair(0,4), Pair(1,0), Pair(2,3), Pair(3,2), Pair(4,1)))
+
+        graphsLoop = listOf(listOf(Pair(0,1), Pair(1,0), Pair(2,3), Pair(3,4), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,0), Pair(2,4), Pair(3,2), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,2), Pair(2,0), Pair(3,4), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,4), Pair(4,0)),
+            listOf(Pair(0,1), Pair(1,2), Pair(2,4), Pair(3,0), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,3), Pair(2,0), Pair(3,4), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,3), Pair(2,4), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,3), Pair(2,4), Pair(3,2), Pair(4,0)),
+            listOf(Pair(0,1), Pair(1,4), Pair(2,0), Pair(3,2), Pair(4,3)),
+            listOf(Pair(0,1), Pair(1,4), Pair(2,3), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,1), Pair(1,4), Pair(2,3), Pair(3,2), Pair(4,0)),
+            listOf(Pair(0,2), Pair(1,0), Pair(2,1), Pair(3,4), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,0), Pair(2,3), Pair(3,4), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,0), Pair(2,4), Pair(3,1), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,0), Pair(3,4), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,1), Pair(3,4), Pair(4,0)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,4), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,3), Pair(2,4), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,0), Pair(3,1), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,1), Pair(3,0), Pair(4,3)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,3), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,2), Pair(1,4), Pair(2,3), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,3), Pair(1,0), Pair(2,4), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,0), Pair(2,4), Pair(3,2), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,0), Pair(2,1), Pair(3,4), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,1), Pair(3,4), Pair(4,0)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,0), Pair(3,4), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,4), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,2), Pair(2,4), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,0), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,0), Pair(3,2), Pair(4,1)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,1), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,3), Pair(1,4), Pair(2,1), Pair(3,2), Pair(4,0)),
+            listOf(Pair(0,4), Pair(1,0), Pair(2,1), Pair(3,2), Pair(4,3)),
+            listOf(Pair(0,4), Pair(1,0), Pair(2,3), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,4), Pair(1,3), Pair(2,1), Pair(3,0), Pair(4,2)),
+            listOf(Pair(0,4), Pair(1,3), Pair(2,0), Pair(3,2), Pair(4,1)),
+            listOf(Pair(0,4), Pair(1,3), Pair(2,0), Pair(3,1), Pair(4,2)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,3), Pair(3,1), Pair(4,0)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,3), Pair(3,0), Pair(4,1)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,1), Pair(3,0), Pair(4,3)),
+            listOf(Pair(0,4), Pair(1,2), Pair(2,0), Pair(3,1), Pair(4,3)),
+            listOf(Pair(0,4), Pair(1,0), Pair(2,3), Pair(3,2), Pair(4,1)))
+
+        redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,4), Pair(4,0))
+        blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,4), Pair(4,0))
     }
 
     fun currentLevel(): Int {

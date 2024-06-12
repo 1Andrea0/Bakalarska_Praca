@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.projekt.databinding.ActivityLevelTwoBinding
@@ -65,15 +66,17 @@ class LevelTwoActivity : AppCompatActivity() {
         val buttonRed = findViewById<Button>(R.id.button5)
 
         buttonBlue.setOnClickListener {
-            if (clickCount<10)
-            textView.text = textView.text.toString() + "M"
-            clickCount++
+            if (clickCount<10) {
+                textView.text = textView.text.toString() + "M"
+                clickCount++
+            }
         }
 
         buttonRed.setOnClickListener {
-            if (clickCount<10)
-            textView.text = textView.text.toString() + "Č"
-            clickCount++
+            if (clickCount<10) {
+                textView.text = textView.text.toString() + "Č"
+                clickCount++
+            }
         }
 
 //        val commands = listOf("Č", "M", "ČM", "MČ", "MM", "ČM", "MČ", "ČČ", "ČMM", "MČM")
@@ -121,6 +124,8 @@ class LevelTwoActivity : AppCompatActivity() {
                 graphView.invalidate()
 
             } else {
+//                Toast.makeText(this@LevelTwoActivity, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_SHORT).show()
                 Log.d("DEBUG", "NEPODARILO SA")
             }
 
