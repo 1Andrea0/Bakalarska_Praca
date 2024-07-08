@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +20,6 @@ import com.example.projekt.databinding.ActivityLevelOneBinding
 class LevelOneActivity : AppCompatActivity() {
 
     lateinit var viewModel: ViewModel
-//    lateinit var graphView: GraphView
     private lateinit var binding: ActivityLevelOneBinding
     private lateinit var prefs: SharedPreferences
 
@@ -35,8 +33,6 @@ class LevelOneActivity : AppCompatActivity() {
     private var buttonAdded = false
     private var buttonFour = false
     private var buttonFive = false
-
-    private var square4: String? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +88,7 @@ class LevelOneActivity : AppCompatActivity() {
             if (clickCount > 5) {
                 addFourthButton()
                 options.add(4,"E")
-                viewModel.addFive()
+//                viewModel.addFive()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints
                 graphView.setNumVertices(5)
@@ -104,6 +100,9 @@ class LevelOneActivity : AppCompatActivity() {
         }
 
         verify.setOnClickListener {
+            // Set the starting and ending coordinates here
+//            graphView.startAnimation(100f, 500f, 100f, 500f, 2000)
+            graphView.startArrowAnimation(viewModel.getCommand(),2000L)
 //            Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_LONG).show()
             if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3))) {
 //            Log.d("DEBUG", "PODARILO SA")
@@ -112,7 +111,7 @@ class LevelOneActivity : AppCompatActivity() {
                 clickCount = levelIndex
 //                Log.d("DEBUG", "$levelIndex")
 
-                if (levelIndex == 2) {
+                if (levelIndex == 4) {
 //                    Log.d("DEBUG", "VSETKO")
 //                    viewModel.nextStage()
 
@@ -149,7 +148,7 @@ class LevelOneActivity : AppCompatActivity() {
                 square1.text = options[currentIndex1]
                 square2.text = options[currentIndex2]
                 square3.text = options[currentIndex3]
-                graphView.invalidate()
+//                graphView.invalidate()
 
             } else {
 //                Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_SHORT).show()
