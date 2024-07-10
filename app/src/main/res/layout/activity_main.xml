@@ -12,8 +12,15 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/aclonica"
         android:text="@string/title"
-        android:textSize="30sp"
+        android:textColor="#000000"
+        android:shadowColor="#bf8bff"
+        android:shadowDx="30"
+        android:shadowDy="25"
+        android:shadowRadius="35"
+        android:padding="16dp"
+        android:textSize="55sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,12 +32,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.10" />
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/blcha_title"
+        android:adjustViewBounds="true"
+        android:maxWidth="150dp"
+        android:maxHeight="150dp"
+        android:scaleType="fitCenter"
+        android:layout_marginBottom="35dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,14 +71,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
-            android:backgroundTint="#00FF00"
+            android:backgroundTint="#e5d0ff"
+            android:textColor="#000000"
             android:insetLeft="6dp"
             android:insetTop="6dp"
             android:insetRight="6dp"
             android:insetBottom="6dp"
             android:text="@string/menu1"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
+            android:fontFamily="@font/aclonica"
             android:layout_weight="1"/>
 
         <Button
@@ -75,14 +89,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
-            android:backgroundTint="#F44336"
+            android:backgroundTint="#dabcff"
+            android:textColor="#000000"
             android:insetLeft="6dp"
             android:insetTop="6dp"
             android:insetRight="6dp"
             android:insetBottom="6dp"
             android:text="@string/menu2"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
+            android:fontFamily="@font/aclonica"
             android:layout_weight="1" />
 
         <Button
@@ -91,14 +107,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
-            android:backgroundTint="#F44336"
+            android:backgroundTint="#cca3ff"
+            android:textColor="#000000"
             android:insetLeft="6dp"
             android:insetTop="6dp"
             android:insetRight="6dp"
             android:insetBottom="6dp"
             android:text="@string/menu3"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
+            android:fontFamily="@font/aclonica"
             android:layout_weight="1"/>
 
         <Button
@@ -107,14 +125,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
-            android:backgroundTint="#F44336"
+            android:backgroundTint="#bf8bff"
+            android:textColor="#000000"
             android:insetLeft="6dp"
             android:insetTop="6dp"
             android:insetRight="6dp"
             android:insetBottom="6dp"
             android:text="@string/menu4"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
+            android:fontFamily="@font/aclonica"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -146,11 +166,11 @@
 
         <Button
             android:id="@+id/button11"
+            android:background="@drawable/rounded_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
-            android:backgroundTint="#00FF00"
             android:insetLeft="6dp"
             android:insetTop="6dp"
             android:insetRight="6dp"
@@ -158,16 +178,18 @@
             android:text="@string/reset1"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="#000000"
+            android:fontFamily="@font/aclonica"
             android:layout_weight="1" />
 
         <Button
             android:id="@+id/button12"
+            android:background="@drawable/rounded_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
             android:backgroundTint="#F44336"
-            android:enabled="false"
             android:insetLeft="6dp"
             android:insetTop="6dp"
             android:insetRight="6dp"
@@ -175,6 +197,8 @@
             android:text="@string/editor1"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="#000000"
+            android:fontFamily="@font/aclonica"
             android:layout_weight="1" />
     </LinearLayout>
 
