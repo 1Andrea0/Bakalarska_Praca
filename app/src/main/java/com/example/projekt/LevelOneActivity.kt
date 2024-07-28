@@ -101,11 +101,14 @@ class LevelOneActivity : AppCompatActivity() {
 
         verify.setOnClickListener {
             // Set the starting and ending coordinates here
-//            graphView.startAnimation(100f, 500f, 100f, 500f, 2000)
-            graphView.startArrowAnimation(viewModel.getCommand(),2000L)
+            graphView.startArrowAnimation(viewModel.getCommand(), 2000L)
 //            Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_LONG).show()
             if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3))) {
 //            Log.d("DEBUG", "PODARILO SA")
+//                Log.d("DEBUG", "$currentIndex1")
+//                Log.d("DEBUG", "$currentIndex2")
+//                Log.d("DEBUG", "$currentIndex3")
+
 
                 val levelIndex = viewModel.nextLevel()
                 clickCount = levelIndex
@@ -123,10 +126,15 @@ class LevelOneActivity : AppCompatActivity() {
                 }
 
                 starView.rating = levelIndex
-                viewModel.arrows()
+                viewModel.createGraph()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints
+//                Log.d("GRAFIKA", "Red: ${graphView.redArrowPoints}")
+//                Log.d("GRAFIKA", "Blue: ${graphView.blueArrowPoints}")
+                Log.d("LOGIKA", "Red: ${viewModel.redArrowPoints}")
+                Log.d("LOGIKA", "Blue: ${viewModel.blueArrowPoints}")
                 text.text = viewModel.getCommand()
+                graphView.invalidate()
 
                 if (prefs.getBoolean("button3", false)) {
                     currentIndex1 = 4
@@ -198,8 +206,8 @@ class LevelOneActivity : AppCompatActivity() {
                 text = options[currentIndex4]
             }
         }
-        binding.buttonContainer.addView(newButton)
-        binding.buttonContainer2.addView(newButton2)
+//        binding.buttonContainer.addView(newButton)
+//        binding.buttonContainer2.addView(newButton2)
         buttonAdded = true
     }
 }

@@ -9,9 +9,10 @@ import kotlin.random.Random
 
 class ViewModel : ViewModel() {
 
-    private val commands = listOf("Č", "M", "ČM", "MČ", "MM", "ČM", "MČ", "ČČ", "ČMM", "MČM")
+    private val commands = listOf("ČM", "M", "ČM", "MČ", "MM", "ČM", "MČ", "ČČ", "ČMM", "MČM")
     private val commands2 = listOf("M", "Č", "MČ", "ČM", "ČČ", "MM", "ČM", "MČ", "MČM", "MČČ")
     private var currentLevel = 0
+    private var currentStage = 1
     private var loop = false
     private var coin = 0
     var stages = 1
@@ -23,14 +24,74 @@ class ViewModel : ViewModel() {
         listOf(Pair(0,2), Pair(1,1), Pair(2,0)),
         listOf(Pair(0,1), Pair(1,0), Pair(2,2)))
 
+    // 12.7. code
+    private val vertices = listOf('A', 'B', 'C', 'D', 'E')
+    private var numberOfVertices = 3
+
     var redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
     var blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
+
+    fun setNumberOfVerticesForGraph(int: Int){numberOfVertices = int}
+
+    fun getNumberOfVerticesForGraph():Int{return numberOfVertices}
+
+//    fun getListOfVertices():List<Char>{return vertices.subList(0,numberOfVertices)}
+
+    fun graphWithoutLoops(startingVertex: Int):MutableList<Pair<Int,Int>>{
+        if (numberOfVertices <= 0) return mutableListOf() // Check for valid number of vertices
+
+        val vertices = (0 until numberOfVertices).toMutableList()
+        val result = mutableListOf<Pair<Int, Int>>()
+
+        if (startingVertex > -1) {
+            vertices.remove(startingVertex)
+        }
+
+        vertices.shuffle()
+
+            for (i in 0 until vertices.size - 1) {
+                result.add(Pair(vertices[i], vertices[i + 1]))
+            }
+            // Add the edge that closes the cycle
+            result.add(Pair(vertices.last(), vertices.first()))
+//        }
+
+        return result
+    }
+
+    fun graphWithLoop(): MutableList<Pair<Int, Int>> {
+        if (numberOfVertices <= 0) return mutableListOf() // Check for valid number of vertices
+
+        // Pick a random vertex for the loop
+        val loopVertex = (0 until numberOfVertices).random()
+
+        // Start with the loop
+        val result = mutableListOf<Pair<Int, Int>>()
+        result.add(Pair(loopVertex, loopVertex))
+
+        // Generate the rest of the graph without loops
+        val remainingEdges = graphWithoutLoops(loopVertex)
+
+        // Add the remaining edges to the result
+        result.addAll(remainingEdges)
+
+        return result
+    }
+
+    fun createGraph(){
+//        redArrowPoints = graphWithLoop().toList()
+//        blueArrowPoints = graphWithLoop().toList()
+        redArrowPoints = graphWithoutLoops(-1).toList()
+        blueArrowPoints = graphWithoutLoops(-1).toList()
+//        Log.d("DEBUG", "Red: $redArrowPoints")
+//        Log.d("DEBUG", "Blue: $blueArrowPoints")
+    }
+
+    // end
 
     fun arrows() {
         if (loop) {
             coin = Math.random().roundToInt()
-//            Log.d("DEBUG", "LOOPUJES?")
-//            Log.d("DEBUG", "$coin")
             if ((coin == 1)) {
                 redArrowPoints = graphsLoop.random()
                 blueArrowPoints = graphs.random()
@@ -42,8 +103,7 @@ class ViewModel : ViewModel() {
             redArrowPoints = graphs.random()
             blueArrowPoints = graphs.random()
         }
-        Log.d("DEBUG", "Red: $redArrowPoints")
-        Log.d("DEBUG", "Blue: $blueArrowPoints")
+
     }
 
     fun resetLevel() {
@@ -92,6 +152,8 @@ class ViewModel : ViewModel() {
         return commands[currentLevel]
     }
 
+    var resultVerify = mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2))
+
     fun verify(answers: List<Int>): Boolean {
         var expectedSize = 3
 
@@ -106,6 +168,12 @@ class ViewModel : ViewModel() {
             mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(expectedSize).toMutableList()
         val command = getCommand().toList()
 
+//        Log.d("LOGIKA", "Red: $redArrowPoints")
+//        Log.d("LOGIKA", "Blue: $blueArrowPoints")
+        Log.d("DEBUG", "Result: $result")
+        Log.d("DEBUG", "Command: $command")
+
+        // command sa nemeni
         for (c in command) {
             if (c == 'M') {
                 for (i in result.indices) {
@@ -125,6 +193,9 @@ class ViewModel : ViewModel() {
             }
         }
 
+        resultVerify = result
+
+        Log.d("DEBUG", "Result finished: $result")
         for (i in answers.indices) {
             if (answers[i] != result[i].second) return false
         }
@@ -135,16 +206,30 @@ class ViewModel : ViewModel() {
     //toto mi dáva lines, teda na level 2 tie buttony vyplnené
     @RequiresApi(Build.VERSION_CODES.N)
     fun verify2() : MutableList<Pair<Int,Int>> {
-        var result = mutableListOf(Pair(0,0), Pair(1,1), Pair(2,2))
-        val command = commands2[currentLevel].toList()
-//        length = command.size
-//        Log.d("DEBUG", "$command")
+        var expectedSize = 3
 
+//        if (answers.size == 4) {
+//            expectedSize = 4
+//        }
+//        if (answers.size == 5) {
+//            expectedSize = 5
+//        }
+
+        val result =
+            mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(expectedSize).toMutableList()
+        val command = getCommand().toList()
+
+//        Log.d("LOGIKA", "Red: $redArrowPoints")
+//        Log.d("LOGIKA", "Blue: $blueArrowPoints")
+        Log.d("DEBUG", "Result: $result")
+        Log.d("DEBUG", "Command: $command")
+
+        // command sa nemeni
         for (c in command) {
             if (c == 'M') {
                 for (i in result.indices) {
                     if (result[i].second == blueArrowPoints[result[i].second].first) {
-                        val updatedPair = Pair(result[i].first, blueArrowPoints[i].second)
+                        val updatedPair = Pair(result[i].first, blueArrowPoints[result[i].second].second)
                         result[i] = updatedPair
                     }
                 }
@@ -152,20 +237,12 @@ class ViewModel : ViewModel() {
             if (c == 'Č') {
                 for (i in result.indices) {
                     if (result[i].second == redArrowPoints[result[i].second].first) {
-                        val updatedPair = Pair(result[i].first, redArrowPoints[i].second)
+                        val updatedPair = Pair(result[i].first, redArrowPoints[result[i].second].second)
                         result[i] = updatedPair
                     }
                 }
             }
         }
-
-//        Log.d("DEBUG", "$result")
-//        Log.d("DEBUG", "$answer0, $answer1, $answer2")
-//        Log.d("DEBUG", "$result")
-
-//        if (answer0 != result[0].second) return false
-//        if (answer1 != result[1].second) return false
-//        if (answer2 != result[2].second) return false
         return result
 
 //        result = mutableListOf(Pair(0,0), Pair(1,1), Pair(2,2))

@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
         prefs = getSharedPreferences("button_prefs", MODE_PRIVATE)
 
-        updateButtonStates()
+//        updateButtonStates()
         prefs.edit().putBoolean("levelThree", false).apply()
         prefs.edit().putBoolean("levelFour", false).apply()
 
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         editor.putBoolean("levelThree", false)
         editor.putBoolean("levelFour", false)
         editor.apply()
-        updateButtonStates()
+//        updateButtonStates()
     }
 
     private fun updateButtonStates() {

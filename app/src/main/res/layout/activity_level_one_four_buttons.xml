@@ -22,13 +22,6 @@
         />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.85" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,20 +35,7 @@
         app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guidelineV" />
-
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/lightbulb"
-        android:adjustViewBounds="true"
-        android:maxWidth="80dp"
-        android:maxHeight="80dp"
-        android:layout_marginBottom="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guidelineV" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -123,152 +103,121 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4">
 
-        <Button
-            android:id="@+id/button9"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:insetLeft="10dp"
-            android:insetRight="3dp"
-            android:text="A"
-            android:enabled="false" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:insetLeft="3dp"
-            android:insetRight="3dp"
-            android:text="B"
-            android:enabled="false" />
+            <Button
+                android:id="@+id/button9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="3dp"
+                android:text="A"
+                android:enabled="false" />
 
-        <Button
-            android:id="@+id/button10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:text="B"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/button10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:insetLeft="3dp"
+                android:insetRight="6dp"
+                android:text="C"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/button15"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:insetLeft="3dp"
+                android:insetRight="6dp"
+                android:text="D"
+                android:enabled="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonContainer2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:insetLeft="3dp"
-            android:insetRight="6dp"
-            android:text="C"
-            android:enabled="false" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button11"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="3dp"
+                android:text="Button"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:insetLeft="3dp"
+                android:insetRight="3dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button13"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:insetLeft="3dp"
+                android:insetRight="6dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="3dp"
+                android:text="Button"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline7">
-
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/arrow_down"
-            android:adjustViewBounds="true"
-            android:layout_weight="1"
-            android:insetLeft="10dp"
-            android:insetRight="3dp"
-            android:maxWidth="80dp"
-            android:maxHeight="80dp" />
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/arrow_down"
-            android:adjustViewBounds="true"
-            android:layout_weight="1"
-            android:insetLeft="10dp"
-            android:insetRight="3dp"
-            android:maxWidth="80dp"
-            android:maxHeight="80dp" />
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/arrow_down"
-            android:adjustViewBounds="true"
-            android:layout_weight="1"
-            android:insetLeft="10dp"
-            android:insetRight="3dp"
-            android:maxWidth="80dp"
-            android:maxHeight="80dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline8">
-
-        <Button
-            android:id="@+id/button11"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:insetLeft="10dp"
-            android:insetRight="3dp"
-            android:text="Button"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/button12"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:insetLeft="3dp"
-            android:insetRight="3dp"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button13"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:insetLeft="3dp"
-            android:insetRight="6dp"
-            android:text="Button" />
-
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.80" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"

@@ -48,16 +48,72 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
     private val arrowHeadLength = 30f
     private val arrowAngle = Math.PI / 6
 
-    var redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
-    var blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
+    var redArrowPoints = listOf(Pair(0, 1), Pair(1, 2), Pair(2, 0))
+    var blueArrowPoints = listOf(Pair(0, 1), Pair(1, 2), Pair(2, 0))
 
     private var bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchaa)
     private var resizedBitmap: Bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, true)
-    var bitmapX: Float = 0f
-    var bitmapY: Float = 0f
+    private var bitmap2: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchab)
+    private var resizedBitmap2: Bitmap = Bitmap.createScaledBitmap(bitmap2, 300, 300, true)
+    private var bitmap3: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchac)
+    private var resizedBitmap3: Bitmap = Bitmap.createScaledBitmap(bitmap3, 300, 300, true)
+
     private var animateBitmap: Boolean = false
 
     private var vertexPoints = listOf<PointF>()
+
+    // Properties for each bitmap's position
+    private val bitmapPositions = mutableListOf<PointF>()
+    private val bitmapList = listOf(resizedBitmap, resizedBitmap2, resizedBitmap3)
+
+    init {
+        // Initialize positions for the bitmaps
+        for (i in bitmapList.indices) {
+            bitmapPositions.add(PointF(0f, 0f))
+        }
+    }
+
+    var bitmap1X: Float
+        get() = bitmapPositions[0].x
+        set(value) {
+            bitmapPositions[0].x = value
+            invalidate()
+        }
+
+    var bitmap1Y: Float
+        get() = bitmapPositions[0].y
+        set(value) {
+            bitmapPositions[0].y = value
+            invalidate()
+        }
+
+    var bitmap2X: Float
+        get() = bitmapPositions[1].x
+        set(value) {
+            bitmapPositions[1].x = value
+            invalidate()
+        }
+
+    var bitmap2Y: Float
+        get() = bitmapPositions[1].y
+        set(value) {
+            bitmapPositions[1].y = value
+            invalidate()
+        }
+
+    var bitmap3X: Float
+        get() = bitmapPositions[2].x
+        set(value) {
+            bitmapPositions[2].x = value
+            invalidate()
+        }
+
+    var bitmap3Y: Float
+        get() = bitmapPositions[2].y
+        set(value) {
+            bitmapPositions[2].y = value
+            invalidate()
+        }
 
     fun setNumVertices(num: Int) {
         numVertices = num
@@ -69,8 +125,9 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
         val centerX = width / 2f
         val centerY = height / 2f
-        val radius = width / 4f // Distance from center to each square center
-        val verticalOffset = ((0.4 * height) - (numVertices * squareSize)) / (numVertices - 1)  // Vertical offset for top and bottom vertices
+        val radius = width / 3f // Distance from center to each square center
+        val verticalOffset =
+            ((0.4 * height) - (numVertices * squareSize)) / (numVertices - 1)  // Vertical offset for top and bottom vertices
 
         vertexPoints = when (numVertices) {
             3 -> drawTriangle(canvas, centerX, centerY, radius, squareSize, verticalOffset)
@@ -79,22 +136,61 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
             else -> listOf()
         }
 
-        if (animateBitmap) {
-            canvas.drawBitmap(resizedBitmap, bitmapX, bitmapY, null)
+        // Draw arrows between vertices
+        val offset = squareSize / 2
+        for (pair in redArrowPoints) {
+            val start = vertexPoints[pair.first]
+            val end = vertexPoints[pair.second]
+            drawArrow(canvas, start, end, redArrowPaint, offset)
+        }
+
+        for (pair in blueArrowPoints) {
+            val start = vertexPoints[pair.first]
+            val end = vertexPoints[pair.second]
+            drawArrow(canvas, start, end, blueArrowPaint, offset)
+        }
+
+        // Draw each bitmap at its corresponding position
+        for (i in bitmapList.indices) {
+            if (animateBitmap) {
+                val bitmap = bitmapList[i]
+                val position = bitmapPositions[i]
+                canvas.drawBitmap(bitmap, position.x, position.y, null)
+            }
         }
     }
 
-    private fun drawTriangle(canvas: Canvas, centerX: Float, centerY: Float, radius: Float, squareSize: Float, verticalOffset: Double): List<PointF> {
+    private fun drawTriangle(
+        canvas: Canvas,
+        centerX: Float,
+        centerY: Float,
+        radius: Float,
+        squareSize: Float,
+        verticalOffset: Double
+    ): List<PointF> {
         val points = listOf(
             PointF(centerX, (centerY - radius - verticalOffset).toFloat()),  // Top
-            PointF(centerX - radius * sin(Math.PI / 3).toFloat(), (centerY + radius / 2 + verticalOffset).toFloat()),  // Bottom left
-            PointF(centerX + radius * sin(Math.PI / 3).toFloat(), (centerY + radius / 2 + verticalOffset).toFloat())   // Bottom right
+            PointF(
+                centerX - radius * sin(Math.PI / 3).toFloat(),
+                (centerY + radius / 2 + verticalOffset).toFloat()
+            ),  // Bottom left
+            PointF(
+                centerX + radius * sin(Math.PI / 3).toFloat(),
+                (centerY + radius / 2 + verticalOffset).toFloat()
+            )   // Bottom right
         )
+
         drawPolygon(canvas, points, squareSize)
         return points
     }
 
-    private fun drawSquare(canvas: Canvas, centerX: Float, centerY: Float, radius: Float, squareSize: Float): List<PointF> {
+    private fun drawSquare(
+        canvas: Canvas,
+        centerX: Float,
+        centerY: Float,
+        radius: Float,
+        squareSize: Float
+    ): List<PointF> {
         val points = listOf(
             PointF(centerX - radius, centerY - radius),
             PointF(centerX + radius, centerY - radius),
@@ -105,7 +201,13 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         return points
     }
 
-    private fun drawPentagon(canvas: Canvas, centerX: Float, centerY: Float, radius: Float, squareSize: Float): List<PointF> {
+    private fun drawPentagon(
+        canvas: Canvas,
+        centerX: Float,
+        centerY: Float,
+        radius: Float,
+        squareSize: Float
+    ): List<PointF> {
         val angle = 2 * Math.PI / 5
         val points = List(5) { i ->
             PointF(
@@ -134,155 +236,91 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
             canvas.drawText(label, point.x, point.y + paint.textSize / 4, paint)
         }
 
-        for (i in points.indices) {
-            drawArrow(
-                canvas, points[redArrowPoints[i].first], points[redArrowPoints[i].second], redArrowPaint, redArrowPaint, 15f * (-1f).pow(i), 15f * (-1f).pow(i)
-            )
-            drawArrow(
-                canvas, points[blueArrowPoints[i].first], points[blueArrowPoints[i].second], blueArrowPaint, blueArrowPaint, -15f * (-1f).pow(i), 15f * (-1f).pow(i)
-            )
-        }
     }
 
-    private fun drawArrow(
-        canvas: Canvas,
-        start: PointF,
-        end: PointF,
-        arrowPaint: Paint,
-        arrowHeadPaint: Paint,
-        offsetY: Float,
-        offsetX: Float
-    ) {
-        if (start == end) {
-            // Draw a loop (arc) for the same start and end points
-            val left = start.x - 50f
-            val top = start.y - 50f
-            val right = start.x + 50f
-            val bottom = start.y + 50f
-            val oval = RectF(left, top, right, bottom)
+    private fun drawArrow(canvas: Canvas, start: PointF, end: PointF, paint: Paint, offset: Float) {
+        val angle = atan2((end.y - start.y), (end.x - start.x))
+        val startX = start.x + offset * cos(angle)
+        val startY = start.y + offset * sin(angle)
+        val endX = end.x - offset * cos(angle)
+        val endY = end.y - offset * sin(angle)
 
-            // Draw the arc (loop)
-            canvas.drawArc(oval, 0f, 270f, false, arrowPaint)
-        } else {
-            val angle = atan2((end.y - start.y).toDouble(), (end.x - start.x).toDouble())
-            val offset = PointF(
-                (squareSize / 2) * cos(angle).toFloat(),
-                (squareSize / 2) * sin(angle).toFloat()
-            )
+        canvas.drawLine(startX, startY, endX, endY, paint)
 
-            val adjustedStart = PointF(start.x + offset.x, start.y + offset.y)
-            val adjustedEnd = PointF(end.x - offset.x, end.y - offset.y)
-
-            // Apply perpendicular offset for non-overlapping
-            val perpendicularOffset = PointF(
-                -offsetY * sin(angle).toFloat() + offsetX * cos(angle).toFloat(),
-                offsetY * cos(angle).toFloat() + offsetX * sin(angle).toFloat()
-            )
-            val finalStart = PointF(
-                adjustedStart.x + perpendicularOffset.x,
-                adjustedStart.y + perpendicularOffset.y
-            )
-            val finalEnd =
-                PointF(adjustedEnd.x + perpendicularOffset.x, adjustedEnd.y + perpendicularOffset.y)
-
-            canvas.drawLine(finalStart.x, finalStart.y, finalEnd.x, finalEnd.y, arrowPaint)
-
-            val arrowEndAngle = atan2(
-                (finalEnd.y - finalStart.y).toDouble(),
-                (finalEnd.x - finalStart.x).toDouble()
-            )
-            val x1 = finalEnd.x - arrowHeadLength * cos(arrowEndAngle + arrowAngle).toFloat()
-            val y1 = finalEnd.y - arrowHeadLength * sin(arrowEndAngle + arrowAngle).toFloat()
-            val x2 = finalEnd.x - arrowHeadLength * cos(arrowEndAngle - arrowAngle).toFloat()
-            val y2 = finalEnd.y - arrowHeadLength * sin(arrowEndAngle - arrowAngle).toFloat()
-
-            canvas.drawLine(finalEnd.x, finalEnd.y, x1, y1, arrowHeadPaint)
-            canvas.drawLine(finalEnd.x, finalEnd.y, x2, y2, arrowHeadPaint)
-        }
+        // Draw the arrow head
+        val arrowAngle1 = angle + arrowAngle
+        val arrowAngle2 = angle - arrowAngle
+        canvas.drawLine(endX, endY,
+            (endX - arrowHeadLength * cos(arrowAngle1)).toFloat(),
+            (endY - arrowHeadLength * sin(arrowAngle1)).toFloat(), paint)
+        canvas.drawLine(endX, endY,
+            (endX - arrowHeadLength * cos(arrowAngle2)).toFloat(),
+            (endY - arrowHeadLength * sin(arrowAngle2)).toFloat(), paint)
     }
 
     fun startArrowAnimation(path: String, duration: Long) {
-        val centerX = width / 2f
-        val centerY = height / 2f
-        val radius = width / 4f
+        animateBitmap = true
+        val animations = mutableListOf<Animator>()
 
-        val verticalOffset = ((0.4 * height) - (numVertices * squareSize)) / (numVertices - 1)
+        for (vertex in 0 until numVertices) {
+            var startVertexIndex = vertex
+            val imageIndex = vertex % bitmapList.size
 
-        val points = when (numVertices) {
-            3 -> listOf(
-                PointF(centerX, (centerY - radius - verticalOffset).toFloat()),  // A
-                PointF(centerX - radius * sin(Math.PI / 3).toFloat(), (centerY + radius / 2 + verticalOffset).toFloat()),  // B
-                PointF(centerX + radius * sin(Math.PI / 3).toFloat(), (centerY + radius / 2 + verticalOffset).toFloat())   // C
-            )
-            4 -> listOf(
-                PointF(centerX - radius, centerY - radius),  // A
-                PointF(centerX + radius, centerY - radius),  // B
-                PointF(centerX - radius, centerY + radius),  // C
-                PointF(centerX + radius, centerY + radius)   // D
-            )
-            5 -> List(5) { i ->
-                PointF(
-                    (centerX + radius * cos(i * 2 * Math.PI / 5)).toFloat(),
-                    (centerY + radius * sin(i * 2 * Math.PI / 5)).toFloat()
+            for (i in path.indices) {
+                val currentChar = path[i]
+
+                val endVertexIndex = getVertexIndexForArrow(currentChar, startVertexIndex)
+
+                val startVertex = vertexPoints[startVertexIndex]
+                val endVertex = vertexPoints[endVertexIndex]
+
+                val animatorX = ObjectAnimator.ofFloat(
+                    this, "bitmap${imageIndex + 1}X",
+                    startVertex.x - bitmapList[imageIndex].width / 2, endVertex.x - bitmapList[imageIndex].width / 2
                 )
+                val animatorY = ObjectAnimator.ofFloat(
+                    this, "bitmap${imageIndex + 1}Y",
+                    startVertex.y - bitmapList[imageIndex].height / 2, endVertex.y - bitmapList[imageIndex].height / 2
+                )
+
+                animatorX.duration = duration
+                animatorY.duration = duration
+
+                animatorX.addUpdateListener {
+                    invalidate()
+                }
+                animatorY.addUpdateListener {
+                    invalidate()
+                }
+
+                val animatorSet = AnimatorSet()
+                animatorSet.playTogether(animatorX, animatorY)
+                animations.add(animatorSet)
+
+                startVertexIndex = endVertexIndex
             }
-            else -> return
         }
-
-        val animations = mutableListOf<ObjectAnimator>()
-
-        for (i in path.indices) {
-            val currentChar = path[i]
-            val startVertexIndex = when (i) {
-                0 -> 1  // Start from vertex A
-                else -> getVertexIndexForArrow(path[i - 1], path[i])
-            }
-            val endVertexIndex = getVertexIndexForArrow(currentChar)
-
-            val start = points[startVertexIndex]
-            val end = points[endVertexIndex]
-
-            val animatorX = ObjectAnimator.ofFloat(this, "bitmapX", start.x - resizedBitmap.width / 2, end.x - resizedBitmap.width / 2)
-            val animatorY = ObjectAnimator.ofFloat(this, "bitmapY", start.y - resizedBitmap.height / 2, end.y - resizedBitmap.height / 2)
-
-            animatorX.duration = duration
-            animatorY.duration = duration
-
-            animatorX.addUpdateListener {
-                invalidate()
-            }
-            animatorY.addUpdateListener {
-                invalidate()
-            }
-
-            animations.add(animatorX)
-            animations.add(animatorY)
-        }
-
-        val animatorSet = AnimatorSet()
-        animatorSet.playSequentially(animations as List<Animator>?)
-        animatorSet.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {
-                animateBitmap = true
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                animateBitmap = false
-                invalidate()
-            }
-
-            override fun onAnimationCancel(animation: Animator) {}
-            override fun onAnimationRepeat(animation: Animator) {}
-        })
-        animatorSet.start()
+        val finalAnimatorSet = AnimatorSet()
+        finalAnimatorSet.playSequentially(animations)
+        finalAnimatorSet.start()
     }
 
-    private fun getVertexIndexForArrow(currentArrow: Char, nextArrow: Char? = null): Int {
-        return when (currentArrow) {
-            'C' -> 2  // For red arrow end point
-            'M' -> 1  // For blue arrow end point
-            else -> 0
+
+
+    private fun getVertexIndexForArrow(char: Char, int: Int): Int {
+        if (char == 'Č') {
+            for (pair in redArrowPoints) {
+                if (int == pair.first) {
+                    return pair.second
+                }
+            }
+        } else {
+            for (pair in blueArrowPoints) {
+                if (int == pair.first) {
+                    return pair.second
+                }
+            }
         }
+        return -1
     }
 }
-
