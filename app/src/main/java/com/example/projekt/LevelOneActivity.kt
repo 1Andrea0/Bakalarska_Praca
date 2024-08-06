@@ -101,6 +101,7 @@ class LevelOneActivity : AppCompatActivity() {
 
         binding.lightbulb.setOnClickListener {
             graphView.startArrowAnimation(viewModel.getCommand(), 2000L)
+//            graphView.bitmapPositions.clear()
         }
 
         verify.setOnClickListener {

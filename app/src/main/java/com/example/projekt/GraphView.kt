@@ -8,12 +8,11 @@ import android.graphics.*
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.pow
 import kotlin.math.sin
+
 
 class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -57,6 +56,10 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
     private var resizedBitmap2: Bitmap = Bitmap.createScaledBitmap(bitmap2, 300, 300, true)
     private var bitmap3: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchac)
     private var resizedBitmap3: Bitmap = Bitmap.createScaledBitmap(bitmap3, 300, 300, true)
+    private var bitmap4: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchad)
+    private var resizedBitmap4: Bitmap = Bitmap.createScaledBitmap(bitmap4, 300, 300, true)
+    private var bitmap5: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchae)
+    private var resizedBitmap5: Bitmap = Bitmap.createScaledBitmap(bitmap5, 300, 300, true)
 
     private var animateBitmap: Boolean = false
 
@@ -64,7 +67,7 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
     // Properties for each bitmap's position
     private val bitmapPositions = mutableListOf<PointF>()
-    private val bitmapList = listOf(resizedBitmap, resizedBitmap2, resizedBitmap3)
+    private val bitmapList = listOf(resizedBitmap, resizedBitmap2, resizedBitmap3, resizedBitmap4, resizedBitmap5).take(numVertices)
 
     init {
         // Initialize positions for the bitmaps
@@ -115,6 +118,34 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
             invalidate()
         }
 
+    var bitmap4X: Float
+        get() = bitmapPositions[3].x
+        set(value) {
+            bitmapPositions[3].x = value
+            invalidate()
+        }
+
+    var bitmap4Y: Float
+        get() = bitmapPositions[3].y
+        set(value) {
+            bitmapPositions[3].y = value
+            invalidate()
+        }
+
+    var bitmap5X: Float
+        get() = bitmapPositions[4].x
+        set(value) {
+            bitmapPositions[4].x = value
+            invalidate()
+        }
+
+    var bitmap5Y: Float
+        get() = bitmapPositions[4].y
+        set(value) {
+            bitmapPositions[4].y = value
+            invalidate()
+        }
+
     fun setNumVertices(num: Int) {
         numVertices = num
         invalidate()
@@ -162,13 +193,25 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
                 drawArrow(canvas, start, end, blueArrowPaint, offset, blueSeparation, inversionFalse)
             }        }
 
+        val transparentPaint = Paint()
+        transparentPaint.alpha = 0
+
         // Draw each bitmap at its corresponding position
         for (i in bitmapList.indices) {
+//            Log.d("BITMAP:","Bitmap:${bitmapPositions}")
             if (animateBitmap) {
                 val bitmap = bitmapList[i]
+//                val bitmapBackup = bitmapList[i]
                 val position = bitmapPositions[i]
-                canvas.drawBitmap(bitmap, position.x, position.y, null)
+                if (position.x == 0f) {
+                    canvas.drawBitmap(bitmap, position.x, position.y, transparentPaint)
+//                    bitmapBackup.eraseColor(Color.TRANSPARENT)
+//                    bitmap = bitmapBackup
+                } else {
+                    canvas.drawBitmap(bitmap, position.x, position.y, null)
+                }
             }
+//            canvas.drawBitmap(bgr, 0, 0, transparentpainthack)
         }
     }
 
@@ -331,6 +374,9 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
                 startVertexIndex = endVertexIndex
                 totalDuration += duration
+
+//                Log.d("DEBUG", "Animating bitmap${imageIndex + 1} from (${startVertex.x}, ${startVertex.y}) to (${endVertex.x}, ${endVertex.y})")
+
             }
         }
         val finalAnimatorSet = AnimatorSet()
@@ -338,12 +384,20 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         finalAnimatorSet.start()
 
         totalDuration += 1000L
-        // Remove the bitmaps after the animation ends
+        // Reset the bitmaps' positions after the animation ends
         Handler(Looper.getMainLooper()).postDelayed({
             animateBitmap = false
+            // Reset bitmap positions to (0,0)
+            bitmapPositions.forEachIndexed { index, pointF ->
+                pointF.set(0f, 0f)
+                // Clear animation values
+                val propertyNameX = "bitmap${index + 1}X"
+                val propertyNameY = "bitmap${index + 1}Y"
+                ObjectAnimator.ofFloat(this, propertyNameX, pointF.x).start()
+                ObjectAnimator.ofFloat(this, propertyNameY, pointF.y).start()
+            }
             invalidate()
         }, totalDuration)
-
     }
 
     private fun getVertexIndexForArrow(char: Char, int: Int): Int {
