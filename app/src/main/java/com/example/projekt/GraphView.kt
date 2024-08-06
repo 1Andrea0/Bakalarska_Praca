@@ -138,17 +138,29 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
         // Draw arrows between vertices
         val offset = squareSize / 2
+        val redSeparation = 15f  // Adjust as needed for desired separation
+        val blueSeparation = -15f  // Adjust as needed for desired separation
+        val inversionTrue = -1f
+        val inversionFalse = 1f
+
         for (pair in redArrowPoints) {
             val start = vertexPoints[pair.first]
             val end = vertexPoints[pair.second]
-            drawArrow(canvas, start, end, redArrowPaint, offset)
+            if (pair.first > pair.second) {
+                drawArrow(canvas, start, end, redArrowPaint, offset, redSeparation, inversionTrue)
+            } else {
+                drawArrow(canvas, start, end, redArrowPaint, offset, redSeparation, inversionFalse)
+            }
         }
 
         for (pair in blueArrowPoints) {
             val start = vertexPoints[pair.first]
             val end = vertexPoints[pair.second]
-            drawArrow(canvas, start, end, blueArrowPaint, offset)
-        }
+            if (pair.first > pair.second) {
+                drawArrow(canvas, start, end, blueArrowPaint, offset, blueSeparation, inversionTrue)
+            } else {
+                drawArrow(canvas, start, end, blueArrowPaint, offset, blueSeparation, inversionFalse)
+            }        }
 
         // Draw each bitmap at its corresponding position
         for (i in bitmapList.indices) {
@@ -238,29 +250,49 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
     }
 
-    private fun drawArrow(canvas: Canvas, start: PointF, end: PointF, paint: Paint, offset: Float) {
+    private fun drawArrow(
+        canvas: Canvas,
+        start: PointF,
+        end: PointF,
+        paint: Paint,
+        offset: Float,
+        separation: Float,
+        inversion: Float
+    ) {
         val angle = atan2((end.y - start.y), (end.x - start.x))
-        val startX = start.x + offset * cos(angle)
-        val startY = start.y + offset * sin(angle)
-        val endX = end.x - offset * cos(angle)
-        val endY = end.y - offset * sin(angle)
+        val separationX = separation * cos(angle + Math.PI / 2).toFloat()
+        val separationY = separation * sin(angle + Math.PI / 2).toFloat()
 
+        val startX = start.x + offset * cos(angle) + separationX * inversion
+        val startY = start.y + offset * sin(angle) + separationY * inversion
+        val endX = end.x - offset * cos(angle) + separationX * inversion
+        val endY = end.y - offset * sin(angle) + separationY * inversion
+
+//        Log.d("ARROW:","SeparationX:$separationX")
         canvas.drawLine(startX, startY, endX, endY, paint)
 
         // Draw the arrow head
         val arrowAngle1 = angle + arrowAngle
         val arrowAngle2 = angle - arrowAngle
-        canvas.drawLine(endX, endY,
+        canvas.drawLine(
+            endX, endY,
             (endX - arrowHeadLength * cos(arrowAngle1)).toFloat(),
-            (endY - arrowHeadLength * sin(arrowAngle1)).toFloat(), paint)
-        canvas.drawLine(endX, endY,
+            (endY - arrowHeadLength * sin(arrowAngle1)).toFloat(),
+            paint
+        )
+        canvas.drawLine(
+            endX, endY,
             (endX - arrowHeadLength * cos(arrowAngle2)).toFloat(),
-            (endY - arrowHeadLength * sin(arrowAngle2)).toFloat(), paint)
+            (endY - arrowHeadLength * sin(arrowAngle2)).toFloat(),
+            paint
+        )
     }
+
 
     fun startArrowAnimation(path: String, duration: Long) {
         animateBitmap = true
         val animations = mutableListOf<Animator>()
+        var totalDuration: Long = 0
 
         for (vertex in 0 until numVertices) {
             var startVertexIndex = vertex
@@ -298,14 +330,21 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
                 animations.add(animatorSet)
 
                 startVertexIndex = endVertexIndex
+                totalDuration += duration
             }
         }
         val finalAnimatorSet = AnimatorSet()
         finalAnimatorSet.playSequentially(animations)
         finalAnimatorSet.start()
+
+        totalDuration += 1000L
+        // Remove the bitmaps after the animation ends
+        Handler(Looper.getMainLooper()).postDelayed({
+            animateBitmap = false
+            invalidate()
+        }, totalDuration)
+
     }
-
-
 
     private fun getVertexIndexForArrow(char: Char, int: Int): Int {
         if (char == 'Č') {

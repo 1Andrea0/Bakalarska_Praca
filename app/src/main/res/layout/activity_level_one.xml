@@ -45,6 +45,7 @@
         app:layout_constraintEnd_toEndOf="@id/guidelineV" />
 
     <ImageView
+        android:id="@+id/lightbulb"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/lightbulb"

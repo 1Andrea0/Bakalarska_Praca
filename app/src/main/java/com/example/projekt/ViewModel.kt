@@ -17,12 +17,12 @@ class ViewModel : ViewModel() {
     private var coin = 0
     var stages = 1
 
-    var graphs = listOf(listOf(Pair(0,1), Pair(1,2), Pair(2,0)),
-        listOf(Pair(0,2), Pair(1,0), Pair(2,1)))
-
-    private var graphsLoop = listOf(listOf(Pair(0,0), Pair(1,2), Pair(2,1)),
-        listOf(Pair(0,2), Pair(1,1), Pair(2,0)),
-        listOf(Pair(0,1), Pair(1,0), Pair(2,2)))
+//    var graphs = listOf(listOf(Pair(0,1), Pair(1,2), Pair(2,0)),
+//        listOf(Pair(0,2), Pair(1,0), Pair(2,1)))
+//
+//    private var graphsLoop = listOf(listOf(Pair(0,0), Pair(1,2), Pair(2,1)),
+//        listOf(Pair(0,2), Pair(1,1), Pair(2,0)),
+//        listOf(Pair(0,1), Pair(1,0), Pair(2,2)))
 
     // 12.7. code
     private val vertices = listOf('A', 'B', 'C', 'D', 'E')
@@ -82,6 +82,7 @@ class ViewModel : ViewModel() {
 //        redArrowPoints = graphWithLoop().toList()
 //        blueArrowPoints = graphWithLoop().toList()
         redArrowPoints = graphWithoutLoops(-1).toList()
+        Log.d("GRAPHS","Red:${redArrowPoints}")
         blueArrowPoints = graphWithoutLoops(-1).toList()
 //        Log.d("DEBUG", "Red: $redArrowPoints")
 //        Log.d("DEBUG", "Blue: $blueArrowPoints")
@@ -89,49 +90,49 @@ class ViewModel : ViewModel() {
 
     // end
 
-    fun arrows() {
-        if (loop) {
-            coin = Math.random().roundToInt()
-            if ((coin == 1)) {
-                redArrowPoints = graphsLoop.random()
-                blueArrowPoints = graphs.random()
-            } else {
-                redArrowPoints = graphs.random()
-                blueArrowPoints = graphsLoop.random()
-            }
-        } else {
-            redArrowPoints = graphs.random()
-            blueArrowPoints = graphs.random()
-        }
-
-    }
+//    fun arrows() {
+//        if (loop) {
+//            coin = Math.random().roundToInt()
+//            if ((coin == 1)) {
+//                redArrowPoints = graphsLoop.random()
+//                blueArrowPoints = graphs.random()
+//            } else {
+//                redArrowPoints = graphs.random()
+//                blueArrowPoints = graphsLoop.random()
+//            }
+//        } else {
+//            redArrowPoints = graphs.random()
+//            blueArrowPoints = graphs.random()
+//        }
+//
+//    }
 
     fun resetLevel() {
         currentLevel = 0
     }
 
-    fun addFour() {
-        graphs = listOf(listOf(Pair(0,1), Pair(1,0), Pair(2,3), Pair(3,2)),
-            listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0)),
-            listOf(Pair(0,1), Pair(1,3), Pair(2,0), Pair(3,2)),
-            listOf(Pair(0,2), Pair(1,0), Pair(2,3), Pair(3,1)),
-            listOf(Pair(0,2), Pair(1,3), Pair(2,0), Pair(3,1)),
-            listOf(Pair(0,2), Pair(1,3), Pair(2,1), Pair(3,0)),
-            listOf(Pair(0,3), Pair(1,0), Pair(2,1), Pair(3,2)),
-            listOf(Pair(0,3), Pair(1,2), Pair(2,0), Pair(3,1)),
-            listOf(Pair(0,3), Pair(1,2), Pair(2,1), Pair(3,0)))
-
-        graphsLoop = listOf(listOf(Pair(0,0), Pair(1,3), Pair(2,1), Pair(3,2)),
-            listOf(Pair(0,1), Pair(1,2), Pair(2,0), Pair(3,3)),
-            listOf(Pair(0,1), Pair(1,3), Pair(2,2), Pair(3,0)),
-            listOf(Pair(0,2), Pair(1,0), Pair(2,1), Pair(3,3)),
-            listOf(Pair(0,2), Pair(1,1), Pair(2,3), Pair(3,0)),
-            listOf(Pair(0,3), Pair(1,0), Pair(2,2), Pair(3,1)),
-            listOf(Pair(0,3), Pair(1,1), Pair(2,0), Pair(3,2)))
-
-        redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
-        blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
-    }
+//    fun addFour() {
+//        graphs = listOf(listOf(Pair(0,1), Pair(1,0), Pair(2,3), Pair(3,2)),
+//            listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0)),
+//            listOf(Pair(0,1), Pair(1,3), Pair(2,0), Pair(3,2)),
+//            listOf(Pair(0,2), Pair(1,0), Pair(2,3), Pair(3,1)),
+//            listOf(Pair(0,2), Pair(1,3), Pair(2,0), Pair(3,1)),
+//            listOf(Pair(0,2), Pair(1,3), Pair(2,1), Pair(3,0)),
+//            listOf(Pair(0,3), Pair(1,0), Pair(2,1), Pair(3,2)),
+//            listOf(Pair(0,3), Pair(1,2), Pair(2,0), Pair(3,1)),
+//            listOf(Pair(0,3), Pair(1,2), Pair(2,1), Pair(3,0)))
+//
+//        graphsLoop = listOf(listOf(Pair(0,0), Pair(1,3), Pair(2,1), Pair(3,2)),
+//            listOf(Pair(0,1), Pair(1,2), Pair(2,0), Pair(3,3)),
+//            listOf(Pair(0,1), Pair(1,3), Pair(2,2), Pair(3,0)),
+//            listOf(Pair(0,2), Pair(1,0), Pair(2,1), Pair(3,3)),
+//            listOf(Pair(0,2), Pair(1,1), Pair(2,3), Pair(3,0)),
+//            listOf(Pair(0,3), Pair(1,0), Pair(2,2), Pair(3,1)),
+//            listOf(Pair(0,3), Pair(1,1), Pair(2,0), Pair(3,2)))
+//
+//        redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
+//        blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
+//    }
 
     fun currentLevel(): Int {
         return currentLevel

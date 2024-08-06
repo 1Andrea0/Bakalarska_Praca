@@ -77,31 +77,34 @@ class LevelOneActivity : AppCompatActivity() {
         text.text = viewModel.getCommand()
         graphView.setNumVertices(3)
 
-        if (prefs.getBoolean("levelThree", false) && (prefs.getBoolean("levelOne", true))) {
-            addFourthButton()
-            options.add(3,"D")
-            viewModel.addFour()
-            graphView.redArrowPoints = viewModel.redArrowPoints
-            graphView.blueArrowPoints = viewModel.blueArrowPoints
-            graphView.setNumVertices(4)
-            Log.d("DEBUG", "$clickCount")
-            if (clickCount > 5) {
-                addFourthButton()
-                options.add(4,"E")
-//                viewModel.addFive()
-                graphView.redArrowPoints = viewModel.redArrowPoints
-                graphView.blueArrowPoints = viewModel.blueArrowPoints
-                graphView.setNumVertices(5)
-            }
-        }
+//        if (prefs.getBoolean("levelThree", false) && (prefs.getBoolean("levelOne", true))) {
+//            addFourthButton()
+//            options.add(3,"D")
+////            viewModel.addFour()
+//            graphView.redArrowPoints = viewModel.redArrowPoints
+//            graphView.blueArrowPoints = viewModel.blueArrowPoints
+//            graphView.setNumVertices(4)
+//            Log.d("DEBUG", "$clickCount")
+//            if (clickCount > 5) {
+//                addFourthButton()
+//                options.add(4,"E")
+////                viewModel.addFive()
+//                graphView.redArrowPoints = viewModel.redArrowPoints
+//                graphView.blueArrowPoints = viewModel.blueArrowPoints
+//                graphView.setNumVertices(5)
+//            }
+//        }
 
         binding.button6.setOnClickListener{
             startActivity(Intent(this, MainActivity::class.java))
         }
 
+        binding.lightbulb.setOnClickListener {
+            graphView.startArrowAnimation(viewModel.getCommand(), 2000L)
+        }
+
         verify.setOnClickListener {
             // Set the starting and ending coordinates here
-            graphView.startArrowAnimation(viewModel.getCommand(), 2000L)
 //            Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_LONG).show()
             if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3))) {
 //            Log.d("DEBUG", "PODARILO SA")
@@ -129,6 +132,7 @@ class LevelOneActivity : AppCompatActivity() {
                 viewModel.createGraph()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints
+
 //                Log.d("GRAFIKA", "Red: ${graphView.redArrowPoints}")
 //                Log.d("GRAFIKA", "Blue: ${graphView.blueArrowPoints}")
                 Log.d("LOGIKA", "Red: ${viewModel.redArrowPoints}")
@@ -136,19 +140,19 @@ class LevelOneActivity : AppCompatActivity() {
                 text.text = viewModel.getCommand()
                 graphView.invalidate()
 
-                if (prefs.getBoolean("button3", false)) {
-                    currentIndex1 = 4
-                    currentIndex2 = 4
-                    currentIndex3 = 4
-                    currentIndex4 = 4
-
-                    square1.text = options[currentIndex1]
-                    square2.text = options[currentIndex2]
-                    square3.text = options[currentIndex3]
-//                    square4.text = options[currentIndex4]
-
-                    graphView.invalidate()
-                }
+//                if (prefs.getBoolean("button3", false)) {
+//                    currentIndex1 = 4
+//                    currentIndex2 = 4
+//                    currentIndex3 = 4
+//                    currentIndex4 = 4
+//
+//                    square1.text = options[currentIndex1]
+//                    square2.text = options[currentIndex2]
+//                    square3.text = options[currentIndex3]
+////                    square4.text = options[currentIndex4]
+//
+//                    graphView.invalidate()
+//                }
                 currentIndex1 = 3
                 currentIndex2 = 3
                 currentIndex3 = 3

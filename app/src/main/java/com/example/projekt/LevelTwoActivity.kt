@@ -106,7 +106,7 @@ class LevelTwoActivity : AppCompatActivity() {
                 }
 
                 starView.rating = levelIndex
-                viewModel.arrows()
+//                viewModel.arrows()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints
 
