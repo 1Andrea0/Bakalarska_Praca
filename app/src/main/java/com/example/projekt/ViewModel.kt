@@ -9,7 +9,7 @@ import kotlin.random.Random
 
 class ViewModel : ViewModel() {
 
-    private val commands = listOf("ČM", "M", "ČM", "MČ", "MM", "ČM", "MČ", "ČČ", "ČMM", "MČM")
+    private val commands = createCommands()
     private val commands2 = listOf("M", "Č", "MČ", "ČM", "ČČ", "MM", "ČM", "MČ", "MČM", "MČČ")
     private var currentLevel = 0
     private var currentStage = 1
@@ -55,6 +55,7 @@ class ViewModel : ViewModel() {
             // Add the edge that closes the cycle
             result.add(Pair(vertices.last(), vertices.first()))
 //        }
+        result.sortBy { it.first }
 
         return result
     }
@@ -74,6 +75,8 @@ class ViewModel : ViewModel() {
 
         // Add the remaining edges to the result
         result.addAll(remainingEdges)
+
+        result.sortBy { it.first }
 
         return result
     }
@@ -111,29 +114,6 @@ class ViewModel : ViewModel() {
         currentLevel = 0
     }
 
-//    fun addFour() {
-//        graphs = listOf(listOf(Pair(0,1), Pair(1,0), Pair(2,3), Pair(3,2)),
-//            listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0)),
-//            listOf(Pair(0,1), Pair(1,3), Pair(2,0), Pair(3,2)),
-//            listOf(Pair(0,2), Pair(1,0), Pair(2,3), Pair(3,1)),
-//            listOf(Pair(0,2), Pair(1,3), Pair(2,0), Pair(3,1)),
-//            listOf(Pair(0,2), Pair(1,3), Pair(2,1), Pair(3,0)),
-//            listOf(Pair(0,3), Pair(1,0), Pair(2,1), Pair(3,2)),
-//            listOf(Pair(0,3), Pair(1,2), Pair(2,0), Pair(3,1)),
-//            listOf(Pair(0,3), Pair(1,2), Pair(2,1), Pair(3,0)))
-//
-//        graphsLoop = listOf(listOf(Pair(0,0), Pair(1,3), Pair(2,1), Pair(3,2)),
-//            listOf(Pair(0,1), Pair(1,2), Pair(2,0), Pair(3,3)),
-//            listOf(Pair(0,1), Pair(1,3), Pair(2,2), Pair(3,0)),
-//            listOf(Pair(0,2), Pair(1,0), Pair(2,1), Pair(3,3)),
-//            listOf(Pair(0,2), Pair(1,1), Pair(2,3), Pair(3,0)),
-//            listOf(Pair(0,3), Pair(1,0), Pair(2,2), Pair(3,1)),
-//            listOf(Pair(0,3), Pair(1,1), Pair(2,0), Pair(3,2)))
-//
-//        redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
-//        blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,3), Pair(3,0))
-//    }
-
     fun currentLevel(): Int {
         return currentLevel
     }
@@ -151,6 +131,26 @@ class ViewModel : ViewModel() {
 
     fun getCommand(): String {
         return commands[currentLevel]
+    }
+
+    fun createCommands() : List<String> {
+        var length = 0
+        val choices = listOf("M","Č")
+        val commands = mutableListOf("","","","","","","","","","")
+
+        for (i in commands.indices) {
+            var command = ""
+            length = if (i > 4) {
+                (2..4).random()
+            } else {
+                (1..3).random()
+            }
+            for (j in 1..length) {
+                command+=choices.random()
+            }
+            commands[i] = command
+        }
+        return commands.toList()
     }
 
     var resultVerify = mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2))

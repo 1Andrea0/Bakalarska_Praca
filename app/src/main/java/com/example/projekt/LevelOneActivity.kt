@@ -115,6 +115,7 @@ class LevelOneActivity : AppCompatActivity() {
 
 
                 val levelIndex = viewModel.nextLevel()
+
                 clickCount = levelIndex
 //                Log.d("DEBUG", "$levelIndex")
 
