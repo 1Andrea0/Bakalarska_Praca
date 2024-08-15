@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -30,14 +31,14 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
     }
 
     private val redArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.RED
+        color = ContextCompat.getColor(context, R.color.red)
         strokeWidth = 10f
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
     }
 
     private val blueArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.BLUE
+        color = ContextCompat.getColor(context, R.color.blue)
         strokeWidth = 10f
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
@@ -47,7 +48,8 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
     private val arrowHeadLength = 30f
     private val arrowAngle = Math.PI / 6
 
-    var redArrowPoints = listOf(Pair(0, 1), Pair(1, 2), Pair(2, 0))
+    var redArrowPoints = listOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numVertices)
+//    var redArrowPoints = listOf(Pair(0, 1), Pair(1, 2), Pair(2, 0))
     var blueArrowPoints = listOf(Pair(0, 1), Pair(1, 2), Pair(2, 0))
 
     private var bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchaa)
@@ -302,33 +304,46 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         separation: Float,
         inversion: Float
     ) {
-        val angle = atan2((end.y - start.y), (end.x - start.x))
-        val separationX = separation * cos(angle + Math.PI / 2).toFloat()
-        val separationY = separation * sin(angle + Math.PI / 2).toFloat()
+        if (start == end) {
+            // Draw a loop (arc) for the same start and end points
+            val loopRadius = 70f // Adjust the loop radius as needed
+            val left = start.x - loopRadius
+            val top = start.y - loopRadius
+            val right = start.x + loopRadius
+            val bottom = start.y + loopRadius
+            val oval = RectF(left, top, right, bottom)
 
-        val startX = start.x + offset * cos(angle) + separationX * inversion
-        val startY = start.y + offset * sin(angle) + separationY * inversion
-        val endX = end.x - offset * cos(angle) + separationX * inversion
-        val endY = end.y - offset * sin(angle) + separationY * inversion
+            // Draw the arc (loop)
+            canvas.drawArc(oval, 0f, 270f, false, paint)
+        } else {
+            val angle = atan2((end.y - start.y), (end.x - start.x))
+            val separationX = separation * cos(angle + Math.PI / 2).toFloat()
+            val separationY = separation * sin(angle + Math.PI / 2).toFloat()
+
+            val startX = start.x + offset * cos(angle) + separationX * inversion
+            val startY = start.y + offset * sin(angle) + separationY * inversion
+            val endX = end.x - offset * cos(angle) + separationX * inversion
+            val endY = end.y - offset * sin(angle) + separationY * inversion
 
 //        Log.d("ARROW:","SeparationX:$separationX")
-        canvas.drawLine(startX, startY, endX, endY, paint)
+            canvas.drawLine(startX, startY, endX, endY, paint)
 
-        // Draw the arrow head
-        val arrowAngle1 = angle + arrowAngle
-        val arrowAngle2 = angle - arrowAngle
-        canvas.drawLine(
-            endX, endY,
-            (endX - arrowHeadLength * cos(arrowAngle1)).toFloat(),
-            (endY - arrowHeadLength * sin(arrowAngle1)).toFloat(),
-            paint
-        )
-        canvas.drawLine(
-            endX, endY,
-            (endX - arrowHeadLength * cos(arrowAngle2)).toFloat(),
-            (endY - arrowHeadLength * sin(arrowAngle2)).toFloat(),
-            paint
-        )
+            // Draw the arrow head
+            val arrowAngle1 = angle + arrowAngle
+            val arrowAngle2 = angle - arrowAngle
+            canvas.drawLine(
+                endX, endY,
+                (endX - arrowHeadLength * cos(arrowAngle1)).toFloat(),
+                (endY - arrowHeadLength * sin(arrowAngle1)).toFloat(),
+                paint
+            )
+            canvas.drawLine(
+                endX, endY,
+                (endX - arrowHeadLength * cos(arrowAngle2)).toFloat(),
+                (endY - arrowHeadLength * sin(arrowAngle2)).toFloat(),
+                paint
+            )
+        }
     }
 
 

@@ -21,12 +21,13 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
         prefs = getSharedPreferences("button_prefs", MODE_PRIVATE)
 
-//        updateButtonStates()
-        prefs.edit().putBoolean("levelThree", false).apply()
-        prefs.edit().putBoolean("levelFour", false).apply()
+        updateButtonStates()
+//        prefs.edit().putBoolean("levelThree", false).apply()
+//        prefs.edit().putBoolean("levelFour", false).apply()
 
         binding.button1.setOnClickListener {
             val intent = Intent(this, LevelOneActivity::class.java)
+            intent.putExtra("layout", "layout1")
             startActivity(intent)
         }
 
@@ -38,8 +39,11 @@ class MainActivity : AppCompatActivity() {
 
        binding.button3.setOnClickListener {
            if (prefs.getBoolean("button3", false)) {
+               prefs.edit().putBoolean("button3", true).apply()
                prefs.edit().putBoolean("levelThree", true).apply()
-               startActivity(Intent(this, LevelOneActivity::class.java))
+               val intent = Intent(this, LevelOneActivity::class.java)
+               intent.putExtra("layout", "layout2")
+               startActivity(intent)
            }
        }
 
@@ -62,19 +66,19 @@ class MainActivity : AppCompatActivity() {
         editor.putBoolean("button3", false)
         editor.putBoolean("button4", false)
         editor.putBoolean("levelThree", false)
-        editor.putBoolean("levelFour", false)
+//        editor.putBoolean("levelFour", false)
         editor.apply()
-//        updateButtonStates()
+        updateButtonStates()
     }
 
     private fun updateButtonStates() {
-        binding.button1.setBackgroundColor(Color.GREEN)
+//        binding.button1.setBackgroundColor(Color.GREEN)
         binding.button1.isEnabled = prefs.getBoolean("button1", true)
-        binding.button2.setBackgroundColor(if (prefs.getBoolean("button2", false)) Color.GREEN else Color.RED)
+//        binding.button2.setBackgroundColor(if (prefs.getBoolean("button2", false)) Color.GREEN else Color.RED)
         binding.button2.isEnabled = prefs.getBoolean("button2", false)
-        binding.button3.setBackgroundColor(if (prefs.getBoolean("button3", false)) Color.GREEN else Color.RED)
+//        binding.button3.setBackgroundColor(if (prefs.getBoolean("button3", false)) Color.GREEN else Color.RED)
         binding.button3.isEnabled = prefs.getBoolean("button3", false)
-        binding.button4.setBackgroundColor(if (prefs.getBoolean("button4", false)) Color.GREEN else Color.RED)
+//        binding.button4.setBackgroundColor(if (prefs.getBoolean("button4", false)) Color.GREEN else Color.RED)
         binding.button4.isEnabled = prefs.getBoolean("button4", false)
     }
 }

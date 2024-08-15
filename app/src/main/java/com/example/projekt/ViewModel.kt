@@ -10,10 +10,13 @@ import kotlin.random.Random
 class ViewModel : ViewModel() {
 
     private val commands = createCommands()
-    private val commands2 = listOf("M", "Č", "MČ", "ČM", "ČČ", "MM", "ČM", "MČ", "MČM", "MČČ")
+    private val graphsRed: MutableList<List<Pair<Int, Int>>> = mutableListOf()
+    private val graphsBlue: MutableList<List<Pair<Int, Int>>> = mutableListOf()
     private var currentLevel = 0
     private var currentStage = 1
     private var loop = false
+    private var numberLoopsRed = 0
+    private var numberLoopsBlue = 0
     private var coin = 0
     var stages = 1
 
@@ -24,8 +27,7 @@ class ViewModel : ViewModel() {
 //        listOf(Pair(0,2), Pair(1,1), Pair(2,0)),
 //        listOf(Pair(0,1), Pair(1,0), Pair(2,2)))
 
-    // 12.7. code
-    private val vertices = listOf('A', 'B', 'C', 'D', 'E')
+//    private val vertices = listOf('A', 'B', 'C', 'D', 'E')
     private var numberOfVertices = 3
 
     var redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
@@ -35,16 +37,16 @@ class ViewModel : ViewModel() {
 
     fun getNumberOfVerticesForGraph():Int{return numberOfVertices}
 
-//    fun getListOfVertices():List<Char>{return vertices.subList(0,numberOfVertices)}
-
-    fun graphWithoutLoops(startingVertex: Int):MutableList<Pair<Int,Int>>{
-        if (numberOfVertices <= 0) return mutableListOf() // Check for valid number of vertices
+    private fun graphWithoutLoops(startingVertex: MutableList<Int>):MutableList<Pair<Int,Int>>{
+        if (numberOfVertices <= 0) return mutableListOf()
 
         val vertices = (0 until numberOfVertices).toMutableList()
         val result = mutableListOf<Pair<Int, Int>>()
 
-        if (startingVertex > -1) {
-            vertices.remove(startingVertex)
+        for (i in startingVertex) {
+            if (i > -1) {
+                vertices.remove(i)
+            }
         }
 
         vertices.shuffle()
@@ -52,28 +54,29 @@ class ViewModel : ViewModel() {
             for (i in 0 until vertices.size - 1) {
                 result.add(Pair(vertices[i], vertices[i + 1]))
             }
-            // Add the edge that closes the cycle
             result.add(Pair(vertices.last(), vertices.first()))
-//        }
+
         result.sortBy { it.first }
 
         return result
     }
 
-    fun graphWithLoop(): MutableList<Pair<Int, Int>> {
-        if (numberOfVertices <= 0) return mutableListOf() // Check for valid number of vertices
+    fun graphWithLoop(numberLoop: Int): MutableList<Pair<Int, Int>> {
+        if (numberOfVertices <= 0) return mutableListOf()
 
-        // Pick a random vertex for the loop
-        val loopVertex = (0 until numberOfVertices).random()
-
-        // Start with the loop
         val result = mutableListOf<Pair<Int, Int>>()
-        result.add(Pair(loopVertex, loopVertex))
+        var repeat = -1
+        val repeating = mutableListOf<Int>()
 
-        // Generate the rest of the graph without loops
-        val remainingEdges = graphWithoutLoops(loopVertex)
+        for (i in (0 until numberLoop).filter { it != repeat }) {
+            val loopVertex = (0 until numberOfVertices).random()
+            repeat = loopVertex
+            result.add(Pair(loopVertex, loopVertex))
+            repeating.add(loopVertex)
+        }
 
-        // Add the remaining edges to the result
+        val remainingEdges = graphWithoutLoops(repeating)
+
         result.addAll(remainingEdges)
 
         result.sortBy { it.first }
@@ -81,34 +84,43 @@ class ViewModel : ViewModel() {
         return result
     }
 
-    fun createGraph(){
-//        redArrowPoints = graphWithLoop().toList()
-//        blueArrowPoints = graphWithLoop().toList()
-        redArrowPoints = graphWithoutLoops(-1).toList()
-        Log.d("GRAPHS","Red:${redArrowPoints}")
-        blueArrowPoints = graphWithoutLoops(-1).toList()
-//        Log.d("DEBUG", "Red: $redArrowPoints")
-//        Log.d("DEBUG", "Blue: $blueArrowPoints")
+    fun numberLoops(){
+        if (numberOfVertices == 3 && loop) {
+            val coin = Math.random().roundToInt()
+            if ((coin == 1)) {
+                numberLoopsRed = 1
+                numberLoopsBlue = 0
+            } else {
+                numberLoopsRed = 0
+                numberLoopsBlue = 1
+            }
+        }
+
+        if (numberOfVertices == 4 && loop) {
+            numberLoopsRed = (0..1).random()
+            numberLoopsBlue = (0..1).random()
+            if (numberLoopsRed == 0 && numberLoopsBlue == 0) numberLoopsRed = 1
+        }
+
+        if (numberOfVertices == 5 && loop) {
+            numberLoopsRed = (0..2).random()
+            numberLoopsBlue = (0..2).random()
+            if (numberLoopsRed == 0 && numberLoopsBlue == 0) numberLoopsRed = 1
+        }
     }
 
-    // end
-
-//    fun arrows() {
-//        if (loop) {
-//            coin = Math.random().roundToInt()
-//            if ((coin == 1)) {
-//                redArrowPoints = graphsLoop.random()
-//                blueArrowPoints = graphs.random()
-//            } else {
-//                redArrowPoints = graphs.random()
-//                blueArrowPoints = graphsLoop.random()
-//            }
-//        } else {
-//            redArrowPoints = graphs.random()
-//            blueArrowPoints = graphs.random()
-//        }
-//
-//    }
+    fun createGraph(){
+        if (loop) {
+            numberLoops()
+            redArrowPoints = graphWithLoop(numberLoopsRed).toList()
+            blueArrowPoints = graphWithLoop(numberLoopsBlue).toList()
+        } else {
+            redArrowPoints = graphWithoutLoops(mutableListOf(-1)).toList()
+            blueArrowPoints = graphWithoutLoops(mutableListOf(-1)).toList()
+        }
+        graphsRed.add(redArrowPoints)
+        graphsBlue.add(blueArrowPoints)
+    }
 
     fun resetLevel() {
         currentLevel = 0
@@ -134,16 +146,16 @@ class ViewModel : ViewModel() {
     }
 
     fun createCommands() : List<String> {
-        var length = 0
+        var length: Int
         val choices = listOf("M","Č")
         val commands = mutableListOf("","","","","","","","","","")
 
         for (i in commands.indices) {
             var command = ""
-            length = if (i > 4) {
+            length = if (i > 3) {
                 (2..4).random()
             } else {
-                (1..3).random()
+                (1..2).random()
             }
             for (j in 1..length) {
                 command+=choices.random()
@@ -153,20 +165,12 @@ class ViewModel : ViewModel() {
         return commands.toList()
     }
 
-    var resultVerify = mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2))
+    private var resultVerify = mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices).toMutableList()
 
     fun verify(answers: List<Int>): Boolean {
-        var expectedSize = 3
-
-        if (answers.size == 4) {
-            expectedSize = 4
-        }
-        if (answers.size == 5) {
-            expectedSize = 5
-        }
 
         val result =
-            mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(expectedSize).toMutableList()
+            mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices).toMutableList()
         val command = getCommand().toList()
 
 //        Log.d("LOGIKA", "Red: $redArrowPoints")
@@ -197,8 +201,10 @@ class ViewModel : ViewModel() {
         resultVerify = result
 
         Log.d("DEBUG", "Result finished: $result")
-        for (i in answers.indices) {
-            if (answers[i] != result[i].second) return false
+        val answersCorrect = answers.take(numberOfVertices)
+        Log.d("ANSWER", "Answer finished: $answersCorrect")
+        for (i in answersCorrect.indices) {
+            if (answersCorrect[i]-1 != result[i].second) return false
         }
 
         return true
@@ -261,7 +267,7 @@ class ViewModel : ViewModel() {
             if (c == 'M') {
                 for (i in result.indices) {
                     if (result[i].second == blueArrowPoints[result[i].second].first) {
-                        val updatedPair = Pair(result[i].first, blueArrowPoints[i].second)
+                        val updatedPair = Pair(result[i].first, blueArrowPoints[result[i].second].second)
                         result[i] = updatedPair
                     }
                 }
@@ -269,7 +275,7 @@ class ViewModel : ViewModel() {
             if (c == 'Č') {
                 for (i in result.indices) {
                     if (result[i].second == redArrowPoints[result[i].second].first) {
-                        val updatedPair = Pair(result[i].first, redArrowPoints[i].second)
+                        val updatedPair = Pair(result[i].first, redArrowPoints[result[i].second].second)
                         result[i] = updatedPair
                     }
                 }

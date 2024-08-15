@@ -2,15 +2,15 @@ package com.example.projekt
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -23,32 +23,44 @@ class LevelOneActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLevelOneBinding
     private lateinit var prefs: SharedPreferences
 
-    private val options = mutableListOf("A", "B", "C", "")
-    private var currentIndex1 = 3
-    private var currentIndex2 = 3
-    private var currentIndex3 = 3
-    private var currentIndex4 = 4
-    private var currentIndex5 = 5
-
-    private var buttonAdded = false
-    private var buttonFour = false
-    private var buttonFive = false
+    private val options = mutableListOf("", "A", "B", "C", "D", "E")
+    private var currentIndex1 = 0
+    private var currentIndex2 = 0
+    private var currentIndex3 = 0
+    private var currentIndex4 = 0
+    private var currentIndex5 = 0
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLevelOneBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//        binding = ActivityLevelOneBinding.inflate(layoutInflater)
+//        binding2 = ActivityLevelOneFourButtonsBinding.inflate(layoutInflater)
 
         prefs = getSharedPreferences("button_prefs", MODE_PRIVATE)
-        var clickCount = 0
+//        val letters = options.take(viewModel.getNumberOfVerticesForGraph()+1)
+
+        // Get the layout extra from the intent
+        val layout = intent.getStringExtra("layout")
+        Log.d("LAYOUT:","$layout")
+
+        // Set the content view based on the layout value
+        when (layout) {
+            "layout1" -> setContentView(R.layout.activity_level_one) // Your first layout XML
+            "layout2" -> setContentView(R.layout.activity_level_one_four_buttons) // Your second layout XML
+//            "layout3" -> setContentView(R.layout.activity_level_one_five_buttons)
+        }
 
         val square1 = findViewById<Button>(R.id.button11)
         val square2 = findViewById<Button>(R.id.button12)
         val square3 = findViewById<Button>(R.id.button13)
+        val square4 = findViewById<Button>(R.id.button14)
 
         val text = findViewById<TextView>(R.id.textView)
         val verify = findViewById<Button>(R.id.button7)
+        val lightbulb = findViewById<ImageView>(R.id.lightbulb)
+        val buttonReturn = findViewById<Button>(R.id.buttonReturn)
 
         val graphView = findViewById<GraphView>(R.id.graphView)
         val starView = findViewById<StarRatingView>(R.id.starView)
@@ -58,73 +70,78 @@ class LevelOneActivity : AppCompatActivity() {
         square3.text = options[currentIndex3]
 
         square1.setOnClickListener {
-            currentIndex1 = (currentIndex1 + 1) % options.size
+            if (currentIndex1 == viewModel.getNumberOfVerticesForGraph()) {
+                currentIndex1 = -1
+            }
+            currentIndex1 += 1
             square1.text = options[currentIndex1]
         }
 
         square2.setOnClickListener {
-            currentIndex2 = (currentIndex2 + 1) % options.size
+            if (currentIndex2 == viewModel.getNumberOfVerticesForGraph()) {
+                currentIndex2 = -1
+            }
+            currentIndex2 += 1
             square2.text = options[currentIndex2]
         }
 
         square3.setOnClickListener {
-            currentIndex3 = (currentIndex3 + 1) % options.size
+            if (currentIndex3 == viewModel.getNumberOfVerticesForGraph()) {
+                currentIndex3 = -1
+            }
+            currentIndex3 += 1
             square3.text = options[currentIndex3]
+        }
+
+        square4?.setOnClickListener {
+            if (currentIndex4 == viewModel.getNumberOfVerticesForGraph()) {
+                currentIndex4 = -1
+            }
+            currentIndex4 += 1
+            square4.text = options[currentIndex4]
         }
 
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
 
-        text.text = viewModel.getCommand()
-        graphView.setNumVertices(3)
-
-//        if (prefs.getBoolean("levelThree", false) && (prefs.getBoolean("levelOne", true))) {
-//            addFourthButton()
-//            options.add(3,"D")
-////            viewModel.addFour()
-//            graphView.redArrowPoints = viewModel.redArrowPoints
-//            graphView.blueArrowPoints = viewModel.blueArrowPoints
-//            graphView.setNumVertices(4)
-//            Log.d("DEBUG", "$clickCount")
-//            if (clickCount > 5) {
-//                addFourthButton()
-//                options.add(4,"E")
-////                viewModel.addFive()
-//                graphView.redArrowPoints = viewModel.redArrowPoints
-//                graphView.blueArrowPoints = viewModel.blueArrowPoints
-//                graphView.setNumVertices(5)
-//            }
-//        }
-
-        binding.button6.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java))
+        if (prefs.getBoolean("levelThree", true)) {
+            if (viewModel.currentLevel() < 5) {
+                graphView.setNumVertices(4)
+                viewModel.setNumberOfVerticesForGraph(4)
+            } else {
+                graphView.setNumVertices(5)
+                viewModel.setNumberOfVerticesForGraph(5)
+            }
+        } else {
+            graphView.setNumVertices(3)
         }
 
-        binding.lightbulb.setOnClickListener {
+        viewModel.createGraph()
+        graphView.redArrowPoints = viewModel.redArrowPoints
+        graphView.blueArrowPoints = viewModel.blueArrowPoints
+
+        val spannableString = SpannableString(viewModel.getCommand())
+        text.text = color(viewModel.getCommand(), spannableString)
+
+        buttonReturn.setOnClickListener{
+            prefs.edit().putBoolean("levelThree", false).apply()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        lightbulb.setOnClickListener {
             graphView.startArrowAnimation(viewModel.getCommand(), 2000L)
-//            graphView.bitmapPositions.clear()
         }
 
         verify.setOnClickListener {
-            // Set the starting and ending coordinates here
-//            Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_LONG).show()
-            if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3))) {
-//            Log.d("DEBUG", "PODARILO SA")
-//                Log.d("DEBUG", "$currentIndex1")
-//                Log.d("DEBUG", "$currentIndex2")
-//                Log.d("DEBUG", "$currentIndex3")
-
+            if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3,currentIndex4))) {
 
                 val levelIndex = viewModel.nextLevel()
 
-                clickCount = levelIndex
-//                Log.d("DEBUG", "$levelIndex")
-
-                if (levelIndex == 4) {
+                if (levelIndex == 2) {
 //                    Log.d("DEBUG", "VSETKO")
 //                    viewModel.nextStage()
 
                     prefs.edit().putBoolean("button2", true).apply()
-//                    Log.d("DEBUG", "${prefs.all}")
 
                     startActivity(Intent(this, MainActivity::class.java))
                     viewModel.resetLevel()
@@ -134,86 +151,73 @@ class LevelOneActivity : AppCompatActivity() {
                 viewModel.createGraph()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints
+                Log.d("DEBUG", "${prefs.all}")
 
 //                Log.d("GRAFIKA", "Red: ${graphView.redArrowPoints}")
 //                Log.d("GRAFIKA", "Blue: ${graphView.blueArrowPoints}")
                 Log.d("LOGIKA", "Red: ${viewModel.redArrowPoints}")
                 Log.d("LOGIKA", "Blue: ${viewModel.blueArrowPoints}")
-                text.text = viewModel.getCommand()
+
+                // Create SpannableString
+                val spannableString = SpannableString(viewModel.getCommand())
+
+                // Set the spannable string to the TextView
+                text.text = color(viewModel.getCommand(), spannableString)
+//                text.text = viewModel.getCommand()
                 graphView.invalidate()
 
-//                if (prefs.getBoolean("button3", false)) {
-//                    currentIndex1 = 4
-//                    currentIndex2 = 4
-//                    currentIndex3 = 4
-//                    currentIndex4 = 4
-//
-//                    square1.text = options[currentIndex1]
-//                    square2.text = options[currentIndex2]
-//                    square3.text = options[currentIndex3]
-////                    square4.text = options[currentIndex4]
-//
-//                    graphView.invalidate()
+//                if (prefs.getBoolean("button3", true)) {
+//                    Log.d("STAGE:","Level 3")
+//                    graphView.setNumVertices(4)
+//                    viewModel.setNumberOfVerticesForGraph(4)
+//                    viewModel.createGraph()
+//                    graphView.redArrowPoints = viewModel.redArrowPoints
+//                    graphView.blueArrowPoints = viewModel.blueArrowPoints
+////
+////                    currentIndex1 = 4
+////                    currentIndex2 = 4
+////                    currentIndex3 = 4
+////                    currentIndex4 = 4
+////
+////                    square1.text = options[currentIndex1]
+////                    square2.text = options[currentIndex2]
+////                    square3.text = options[currentIndex3]
+//////                    square4.text = options[currentIndex4]
+////
+////                    graphView.invalidate()
 //                }
-                currentIndex1 = 3
-                currentIndex2 = 3
-                currentIndex3 = 3
+                currentIndex1 = 0
+                currentIndex2 = 0
+                currentIndex3 = 0
+                currentIndex4 = 0
 
                 square1.text = options[currentIndex1]
                 square2.text = options[currentIndex2]
                 square3.text = options[currentIndex3]
-//                graphView.invalidate()
+                square4?.text = options[currentIndex4]
 
             } else {
-//                Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_SHORT).show()
-//                Toast.makeText(this, "NESPRÁVNE. SKÚS ZNOVU", Toast.LENGTH_SHORT).show()
                 Log.d("DEBUG", "NEPODARILO SA")
             }
         }
     }
 
-    private fun addFourthButton() {
-        val newButton = Button(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-            ).apply {
-                marginStart = 3
-                marginEnd = 3
-            }
-            isEnabled = false
-            text = "D"
-            id = View.generateViewId()
-            textSize = 20f
-            setTypeface(typeface, Typeface.BOLD)
-        }
-
-        val newButton2 = Button(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-            ).apply {
-                marginStart = 3
-                marginEnd = 3
-            }
-            text = ""
-            id = View.generateViewId()
-            textSize = 20f
-            setTypeface(typeface, Typeface.BOLD)
-//            background = null
-            setPadding(8, 0, 8, 0) // Adjust the padding as needed
-
-            setBackgroundColor(ContextCompat.getColor(this@LevelOneActivity, R.color.purple_500))
-            setTextColor(Color.WHITE)
-            setOnClickListener {
-                currentIndex4 = (currentIndex4+1)%options.size
-                text = options[currentIndex4]
+    fun color(command: String, spannableString: SpannableString): SpannableString {
+        // Apply color spans
+        for (i in command.indices) {
+            when (command[i]) {
+                'M' -> spannableString.setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(this, R.color.blue)),
+                    i, i + 1,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                'Č' -> spannableString.setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(this, R.color.red)),
+                    i, i + 1,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
         }
-//        binding.buttonContainer.addView(newButton)
-//        binding.buttonContainer2.addView(newButton2)
-        buttonAdded = true
+        return spannableString
     }
 }
