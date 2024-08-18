@@ -166,12 +166,16 @@ class LevelOneActivity : AppCompatActivity() {
             overlay.visibility = View.INVISIBLE
         }
 
+        viewModel.currentLevel = prefs.getInt("stars",0)
+        starView.rating = viewModel.currentLevel
+
         verify.setOnClickListener {
             if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3,currentIndex4,currentIndex5))) {
 
-                val levelIndex = viewModel.nextLevel()
+                prefs.edit().putInt("stars",viewModel.nextLevel()).apply()
 
-                if (levelIndex == 10) {
+                if (prefs.getInt("stars",0) == 10) {
+                    prefs.edit().putInt("stars",0).apply()
 
                     if (prefs.getBoolean("button1", true)) {
                         prefs.edit().putBoolean("button2", true).apply()
@@ -190,7 +194,7 @@ class LevelOneActivity : AppCompatActivity() {
                     }
                 }
 
-                starView.rating = levelIndex
+                starView.rating = viewModel.currentLevel
                 viewModel.createGraph()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints

@@ -69,8 +69,23 @@ class LevelTwoActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
 
+        if (prefs.getBoolean("levelThree", true)) {
+            graphView.setNumVertices(4)
+            viewModel.setNumberOfVerticesForGraph(4)
+        } else {
+            if (prefs.getBoolean("levelFour", true)) {
+                graphView.setNumVertices(5)
+                viewModel.setNumberOfVerticesForGraph(5)
+            } else {
+                graphView.setNumVertices(3)
+            }
+        }
+
+        viewModel.createGraph()
+        graphView.redArrowPoints = viewModel.redArrowPoints
+        graphView.blueArrowPoints = viewModel.blueArrowPoints
+
         var result = viewModel.verify()
-        var numVertices = viewModel.getNumberOfVerticesForGraph()
 
         currentIndex1 = result[0].second
         currentIndex2 = result[1].second
@@ -90,22 +105,6 @@ class LevelTwoActivity : AppCompatActivity() {
         val buttonRed = findViewById<Button>(R.id.button5)
 
         var spannableString: SpannableString
-
-        if (prefs.getBoolean("levelThree", true)) {
-            graphView.setNumVertices(4)
-            viewModel.setNumberOfVerticesForGraph(4)
-        } else {
-            if (prefs.getBoolean("levelFour", true)) {
-                graphView.setNumVertices(5)
-                viewModel.setNumberOfVerticesForGraph(5)
-            } else {
-                graphView.setNumVertices(3)
-            }
-        }
-
-        viewModel.createGraph()
-        graphView.redArrowPoints = viewModel.redArrowPoints
-        graphView.blueArrowPoints = viewModel.blueArrowPoints
 
         buttonBlue.setOnClickListener {
             if (clickCount < 10) {
@@ -157,13 +156,17 @@ class LevelTwoActivity : AppCompatActivity() {
             overlay.visibility = View.INVISIBLE
         }
 
+        viewModel.currentLevel = prefs.getInt("stars",0)
+        starView.rating = viewModel.currentLevel
+
         verify.setOnClickListener {
             if (viewModel.verify(listOf(currentIndex1,currentIndex2,currentIndex3,currentIndex4,currentIndex5),textView.text.toString().toList())) {
 
-                val levelIndex = viewModel.nextLevel()
+                prefs.edit().putInt("stars",viewModel.nextLevel()).apply()
                 clickCount = 0
 
-                if (levelIndex == 10) {
+                if (prefs.getInt("stars",0) == 10) {
+                    prefs.edit().putInt("stars",0).apply()
 
                     if (prefs.getBoolean("button2", true)) {
                         prefs.edit().putBoolean("button3", true).apply()
@@ -177,7 +180,7 @@ class LevelTwoActivity : AppCompatActivity() {
                     }
                 }
 
-                starView.rating = levelIndex
+                starView.rating = viewModel.currentLevel
                 viewModel.createGraph()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints

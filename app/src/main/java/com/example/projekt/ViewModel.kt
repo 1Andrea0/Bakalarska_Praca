@@ -1,30 +1,37 @@
 package com.example.projekt
 
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class ViewModel : ViewModel() {
 
+//    private var prefs = getSharedPreferences("button_prefs", AppCompatActivity.MODE_PRIVATE)
     private val commands = createCommands()
     private val graphsRed: MutableList<List<Pair<Int, Int>>> = mutableListOf()
     private val graphsBlue: MutableList<List<Pair<Int, Int>>> = mutableListOf()
-    private var currentLevel = 0
+    var currentLevel = 0
     private var loop = false
     private var numberLoopsRed = 0
     private var numberLoopsBlue = 0
 
     private var numberOfVertices = 3
 
-    var redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
-    var blueArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
+    var redArrowPoints = listOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices)
+    var blueArrowPoints = listOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices)
 
     fun setNumberOfVerticesForGraph(int: Int){numberOfVertices = int}
 
     fun getNumberOfVerticesForGraph():Int{return numberOfVertices}
+
+//    fun level() {
+//        prefs =
+//    }
 
     private fun graphWithoutLoops(startingVertex: MutableList<Int>):MutableList<Pair<Int,Int>>{
         if (numberOfVertices <= 0) return mutableListOf()
@@ -107,6 +114,7 @@ class ViewModel : ViewModel() {
             redArrowPoints = graphWithoutLoops(mutableListOf(-1)).toList()
             blueArrowPoints = graphWithoutLoops(mutableListOf(-1)).toList()
         }
+
         graphsRed.add(redArrowPoints)
         graphsBlue.add(blueArrowPoints)
     }
@@ -115,8 +123,8 @@ class ViewModel : ViewModel() {
         currentLevel = 0
     }
 
-    fun currentLevel(): Int {
-        return currentLevel
+    fun currentLevel(int: Int) {
+        currentLevel = int
     }
 
     fun nextLevel() : Int {
@@ -139,7 +147,7 @@ class ViewModel : ViewModel() {
             length = if (i > 3) {
                 (2..4).random()
             } else {
-                (1..2).random()
+                (1..numberOfVertices+1).random()
             }
             for (j in 1..length) {
                 command+=choices.random()

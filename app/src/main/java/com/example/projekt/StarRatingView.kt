@@ -23,7 +23,7 @@ class StarRatingView(context: Context, attrs: AttributeSet?) : LinearLayout(cont
             LayoutParams.WRAP_CONTENT,
             LayoutParams.WRAP_CONTENT
         )
-        starLayoutParams.setMargins(0, 0, 8.dpToPx(), 0) // Adjust margin as needed
+        starLayoutParams.setMargins(0, 0, 7.dpToPx(), 0) // Adjust margin as needed
 
         for (i in 0 until 10) { // Add 10 stars
             val starImageView = ImageView(context)

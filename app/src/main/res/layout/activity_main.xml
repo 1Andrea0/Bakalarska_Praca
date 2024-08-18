@@ -239,4 +239,20 @@
             android:layout_weight="1" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/warningView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="50dp"
+        android:background="@drawable/warning_button"
+        android:text="Všetky levely sú odomknuté. Pre zamknutie klikni na Vymazať."
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:layout_constraintBottom_toTopOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
