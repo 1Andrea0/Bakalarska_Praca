@@ -36,27 +36,27 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-       binding.button2.setOnClickListener {
-           prefs.edit().putBoolean("levelThree", false).apply()
-           prefs.edit().putBoolean("levelFour", false).apply()
-           if (prefs.getBoolean("button2", false)) {
-               prefs.edit().putBoolean("button2", true).apply()
-               val intent = Intent(this, LevelTwoActivity::class.java)
-               intent.putExtra("layout", "layout1")
-               startActivity(intent)
-           }
-       }
+        binding.button2.setOnClickListener {
+            prefs.edit().putBoolean("levelThree", false).apply()
+            prefs.edit().putBoolean("levelFour", false).apply()
+            if (prefs.getBoolean("button2", false)) {
+                prefs.edit().putBoolean("button2", true).apply()
+                val intent = Intent(this, LevelTwoActivity::class.java)
+                intent.putExtra("layout", "layout1")
+                startActivity(intent)
+            }
+        }
 
-       binding.button3.setOnClickListener {
-           prefs.edit().putBoolean("levelThree", true).apply()
-           prefs.edit().putBoolean("levelFour", false).apply()
-           if (prefs.getBoolean("button3", false)) {
-               prefs.edit().putBoolean("button3", true).apply()
-               val intent = Intent(this, LevelOneActivity::class.java)
-               intent.putExtra("layout", "layout2")
-               startActivity(intent)
-           }
-       }
+        binding.button3.setOnClickListener {
+            prefs.edit().putBoolean("levelThree", true).apply()
+            prefs.edit().putBoolean("levelFour", false).apply()
+            if (prefs.getBoolean("button3", false)) {
+                prefs.edit().putBoolean("button3", true).apply()
+                val intent = Intent(this, LevelOneActivity::class.java)
+                intent.putExtra("layout", "layout2")
+                startActivity(intent)
+            }
+        }
 
         binding.button4.setOnClickListener {
             prefs.edit().putBoolean("levelThree", true).apply()
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("layout", "layout2")
                 startActivity(intent)
             }
-       }
+        }
 
         binding.button5.setOnClickListener {
             prefs.edit().putBoolean("levelThree", false).apply()
@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.button12.setOnClickListener {
             binding.warningView.visibility = View.VISIBLE
+            binding.warningView.text = "Všetky levely sú odomknuté. Pre zamknutie klikni na Vymazať."
             updateButtonStates2()
         }
 

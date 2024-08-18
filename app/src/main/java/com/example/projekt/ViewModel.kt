@@ -11,8 +11,7 @@ import kotlin.random.Random
 
 class ViewModel : ViewModel() {
 
-//    private var prefs = getSharedPreferences("button_prefs", AppCompatActivity.MODE_PRIVATE)
-    private val commands = createCommands()
+    private var commands = ""
     private val graphsRed: MutableList<List<Pair<Int, Int>>> = mutableListOf()
     private val graphsBlue: MutableList<List<Pair<Int, Int>>> = mutableListOf()
     var currentLevel = 0
@@ -28,10 +27,6 @@ class ViewModel : ViewModel() {
     fun setNumberOfVerticesForGraph(int: Int){numberOfVertices = int}
 
     fun getNumberOfVerticesForGraph():Int{return numberOfVertices}
-
-//    fun level() {
-//        prefs =
-//    }
 
     private fun graphWithoutLoops(startingVertex: MutableList<Int>):MutableList<Pair<Int,Int>>{
         if (numberOfVertices <= 0) return mutableListOf()
@@ -134,27 +129,24 @@ class ViewModel : ViewModel() {
     }
 
     fun getCommand(): String {
-        return commands[currentLevel]
+        return commands
     }
 
-    fun createCommands() : List<String> {
-        var length: Int
+    fun createCommands() : String {
         val choices = listOf("M","Č")
-        val commands = mutableListOf("","","","","","","","","","")
 
-        for (i in commands.indices) {
             var command = ""
-            length = if (i > 3) {
-                (2..4).random()
+        val length: Int = if (currentLevel > 3) {
+                (2..numberOfVertices+1).random()
             } else {
-                (1..numberOfVertices+1).random()
+                (1..2).random()
             }
             for (j in 1..length) {
                 command+=choices.random()
             }
-            commands[i] = command
-        }
-        return commands.toList()
+            commands = command
+
+        return commands
     }
 
     private var resultVerify = mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices).toMutableList()

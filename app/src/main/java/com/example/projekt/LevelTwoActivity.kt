@@ -82,6 +82,7 @@ class LevelTwoActivity : AppCompatActivity() {
         }
 
         viewModel.createGraph()
+        viewModel.createCommands()
         graphView.redArrowPoints = viewModel.redArrowPoints
         graphView.blueArrowPoints = viewModel.blueArrowPoints
 
@@ -182,6 +183,7 @@ class LevelTwoActivity : AppCompatActivity() {
 
                 starView.rating = viewModel.currentLevel
                 viewModel.createGraph()
+                viewModel.createCommands()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints
 

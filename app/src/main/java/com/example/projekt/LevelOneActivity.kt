@@ -116,8 +116,8 @@ class LevelOneActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
 
         if (prefs.getBoolean("levelThree", true)) {
-                graphView.setNumVertices(4)
-                viewModel.setNumberOfVerticesForGraph(4)
+            graphView.setNumVertices(4)
+            viewModel.setNumberOfVerticesForGraph(4)
         } else {
             if (prefs.getBoolean("levelFour", true)) {
                 graphView.setNumVertices(5)
@@ -128,6 +128,7 @@ class LevelOneActivity : AppCompatActivity() {
         }
 
         viewModel.createGraph()
+        viewModel.createCommands()
         graphView.redArrowPoints = viewModel.redArrowPoints
         graphView.blueArrowPoints = viewModel.blueArrowPoints
 
@@ -196,6 +197,7 @@ class LevelOneActivity : AppCompatActivity() {
 
                 starView.rating = viewModel.currentLevel
                 viewModel.createGraph()
+                viewModel.createCommands()
                 graphView.redArrowPoints = viewModel.redArrowPoints
                 graphView.blueArrowPoints = viewModel.blueArrowPoints
 
