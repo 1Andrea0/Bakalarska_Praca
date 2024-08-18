@@ -64,7 +64,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:weightSum="4" >
+        android:weightSum="6" >
 
         <Button
             android:id="@+id/button1"
@@ -133,6 +133,42 @@
             android:insetRight="6dp"
             android:insetBottom="6dp"
             android:text="@string/menu4"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/aclonica"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:backgroundTint="#ac8bff"
+            android:textColor="#000000"
+            android:insetLeft="6dp"
+            android:insetTop="6dp"
+            android:insetRight="6dp"
+            android:insetBottom="6dp"
+            android:text="@string/menu5"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/aclonica"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:backgroundTint="#998bff"
+            android:textColor="#000000"
+            android:insetLeft="6dp"
+            android:insetTop="6dp"
+            android:insetRight="6dp"
+            android:insetBottom="6dp"
+            android:text="@string/menu6"
             android:textSize="30sp"
             android:textStyle="bold"
             android:fontFamily="@font/aclonica"

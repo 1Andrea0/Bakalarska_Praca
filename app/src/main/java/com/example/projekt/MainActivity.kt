@@ -22,25 +22,31 @@ class MainActivity : AppCompatActivity() {
         prefs = getSharedPreferences("button_prefs", MODE_PRIVATE)
 
         updateButtonStates()
-//        prefs.edit().putBoolean("levelThree", false).apply()
-//        prefs.edit().putBoolean("levelFour", false).apply()
 
         binding.button1.setOnClickListener {
+            prefs.edit().putBoolean("levelThree", false).apply()
+            prefs.edit().putBoolean("levelFour", false).apply()
             val intent = Intent(this, LevelOneActivity::class.java)
             intent.putExtra("layout", "layout1")
             startActivity(intent)
         }
 
        binding.button2.setOnClickListener {
+           prefs.edit().putBoolean("levelThree", false).apply()
+           prefs.edit().putBoolean("levelFour", false).apply()
            if (prefs.getBoolean("button2", false)) {
-               startActivity(Intent(this, LevelTwoActivity::class.java))
+               prefs.edit().putBoolean("button2", true).apply()
+               val intent = Intent(this, LevelTwoActivity::class.java)
+               intent.putExtra("layout", "layout1")
+               startActivity(intent)
            }
        }
 
        binding.button3.setOnClickListener {
+           prefs.edit().putBoolean("levelThree", true).apply()
+           prefs.edit().putBoolean("levelFour", false).apply()
            if (prefs.getBoolean("button3", false)) {
                prefs.edit().putBoolean("button3", true).apply()
-               prefs.edit().putBoolean("levelThree", true).apply()
                val intent = Intent(this, LevelOneActivity::class.java)
                intent.putExtra("layout", "layout2")
                startActivity(intent)
@@ -48,11 +54,37 @@ class MainActivity : AppCompatActivity() {
        }
 
         binding.button4.setOnClickListener {
-           if (prefs.getBoolean("button4", false)) {
-               prefs.edit().putBoolean("levelFour", true).apply()
-               startActivity(Intent(this, LevelTwoActivity::class.java))
-           }
+            prefs.edit().putBoolean("levelThree", true).apply()
+            prefs.edit().putBoolean("levelFour", false).apply()
+            if (prefs.getBoolean("button4", false)) {
+                prefs.edit().putBoolean("button4", true).apply()
+                val intent = Intent(this, LevelTwoActivity::class.java)
+                intent.putExtra("layout", "layout2")
+                startActivity(intent)
+            }
        }
+
+        binding.button5.setOnClickListener {
+            prefs.edit().putBoolean("levelThree", false).apply()
+            prefs.edit().putBoolean("levelFour", true).apply()
+            if (prefs.getBoolean("button5", false)) {
+                prefs.edit().putBoolean("button5", true).apply()
+                val intent = Intent(this, LevelOneActivity::class.java)
+                intent.putExtra("layout", "layout3")
+                startActivity(intent)
+            }
+        }
+
+        binding.button6.setOnClickListener {
+            prefs.edit().putBoolean("levelThree", false).apply()
+            prefs.edit().putBoolean("levelFour", true).apply()
+            if (prefs.getBoolean("button6", false)) {
+                prefs.edit().putBoolean("button6", true).apply()
+                val intent = Intent(this, LevelTwoActivity::class.java)
+                intent.putExtra("layout", "layout3")
+                startActivity(intent)
+            }
+        }
 
         binding.button11.setOnClickListener {
             createStates()
@@ -62,23 +94,23 @@ class MainActivity : AppCompatActivity() {
     private fun createStates() {
         val editor = prefs.edit()
         editor.putBoolean("button1", true)
-        editor.putBoolean("button2", false)
-        editor.putBoolean("button3", false)
-        editor.putBoolean("button4", false)
+        editor.putBoolean("button2", true)
+        editor.putBoolean("button3", true)
+        editor.putBoolean("button4", true)
+        editor.putBoolean("button5", true)
+        editor.putBoolean("button6", false)
         editor.putBoolean("levelThree", false)
-//        editor.putBoolean("levelFour", false)
+        editor.putBoolean("levelFour", true)
         editor.apply()
         updateButtonStates()
     }
 
     private fun updateButtonStates() {
-//        binding.button1.setBackgroundColor(Color.GREEN)
         binding.button1.isEnabled = prefs.getBoolean("button1", true)
-//        binding.button2.setBackgroundColor(if (prefs.getBoolean("button2", false)) Color.GREEN else Color.RED)
         binding.button2.isEnabled = prefs.getBoolean("button2", false)
-//        binding.button3.setBackgroundColor(if (prefs.getBoolean("button3", false)) Color.GREEN else Color.RED)
         binding.button3.isEnabled = prefs.getBoolean("button3", false)
-//        binding.button4.setBackgroundColor(if (prefs.getBoolean("button4", false)) Color.GREEN else Color.RED)
         binding.button4.isEnabled = prefs.getBoolean("button4", false)
+        binding.button5.isEnabled = prefs.getBoolean("button5", false)
+        binding.button6.isEnabled = prefs.getBoolean("button6", false)
     }
 }

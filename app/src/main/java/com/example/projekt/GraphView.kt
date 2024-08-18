@@ -1,6 +1,7 @@
 package com.example.projekt
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -48,9 +49,10 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
     private val arrowHeadLength = 30f
     private val arrowAngle = Math.PI / 6
 
+    var boolean = false
+
     var redArrowPoints = listOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numVertices)
-//    var redArrowPoints = listOf(Pair(0, 1), Pair(1, 2), Pair(2, 0))
-    var blueArrowPoints = listOf(Pair(0, 1), Pair(1, 2), Pair(2, 0))
+    var blueArrowPoints = listOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numVertices)
 
     private var bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blchaa)
     private var resizedBitmap: Bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, true)
@@ -67,12 +69,10 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
     private var vertexPoints = listOf<PointF>()
 
-    // Properties for each bitmap's position
     private val bitmapPositions = mutableListOf<PointF>()
-    private val bitmapList = listOf(resizedBitmap, resizedBitmap2, resizedBitmap3, resizedBitmap4, resizedBitmap5).take(numVertices)
+    val bitmapList = listOf(resizedBitmap, resizedBitmap2, resizedBitmap3, resizedBitmap4, resizedBitmap5)
 
     init {
-        // Initialize positions for the bitmaps
         for (i in bitmapList.indices) {
             bitmapPositions.add(PointF(0f, 0f))
         }
@@ -153,26 +153,29 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         invalidate()
     }
 
+    fun getNumVertices(): Int {
+        return numVertices
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         val centerX = width / 2f
         val centerY = height / 2f
-        val radius = width / 3f // Distance from center to each square center
+        val radius = width / 3f
         val verticalOffset =
-            ((0.4 * height) - (numVertices * squareSize)) / (numVertices - 1)  // Vertical offset for top and bottom vertices
+            ((0.4 * height) - (numVertices * squareSize)) / (numVertices - 1)
 
         vertexPoints = when (numVertices) {
             3 -> drawTriangle(canvas, centerX, centerY, radius, squareSize, verticalOffset)
-            4 -> drawSquare(canvas, centerX, centerY, radius, squareSize)
-            5 -> drawPentagon(canvas, centerX, centerY, radius, squareSize)
+            4 -> drawSquare(canvas, centerX, centerY, radius, squareSize, verticalOffset)
+            5 -> drawPentagon(canvas, centerX, centerY, radius, squareSize, verticalOffset)
             else -> listOf()
         }
 
-        // Draw arrows between vertices
         val offset = squareSize / 2
-        val redSeparation = 15f  // Adjust as needed for desired separation
-        val blueSeparation = -15f  // Adjust as needed for desired separation
+        val redSeparation = 15f
+        val blueSeparation = -15f
         val inversionTrue = -1f
         val inversionFalse = 1f
 
@@ -198,22 +201,16 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         val transparentPaint = Paint()
         transparentPaint.alpha = 0
 
-        // Draw each bitmap at its corresponding position
         for (i in bitmapList.indices) {
-//            Log.d("BITMAP:","Bitmap:${bitmapPositions}")
             if (animateBitmap) {
                 val bitmap = bitmapList[i]
-//                val bitmapBackup = bitmapList[i]
                 val position = bitmapPositions[i]
                 if (position.x == 0f) {
                     canvas.drawBitmap(bitmap, position.x, position.y, transparentPaint)
-//                    bitmapBackup.eraseColor(Color.TRANSPARENT)
-//                    bitmap = bitmapBackup
                 } else {
                     canvas.drawBitmap(bitmap, position.x, position.y, null)
                 }
             }
-//            canvas.drawBitmap(bgr, 0, 0, transparentpainthack)
         }
     }
 
@@ -246,13 +243,14 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         centerX: Float,
         centerY: Float,
         radius: Float,
-        squareSize: Float
+        squareSize: Float,
+        verticalOffset: Double
     ): List<PointF> {
         val points = listOf(
-            PointF(centerX - radius, centerY - radius),
-            PointF(centerX + radius, centerY - radius),
-            PointF(centerX - radius, centerY + radius),
-            PointF(centerX + radius, centerY + radius)
+            PointF(centerX - radius, (centerY - radius - verticalOffset).toFloat()),
+            PointF(centerX + radius, (centerY - radius - verticalOffset).toFloat()),
+            PointF(centerX - radius, (centerY + radius + verticalOffset).toFloat()),
+            PointF(centerX + radius, (centerY + radius + verticalOffset).toFloat())
         )
         drawPolygon(canvas, points, squareSize)
         return points
@@ -263,7 +261,8 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         centerX: Float,
         centerY: Float,
         radius: Float,
-        squareSize: Float
+        squareSize: Float,
+        verticalOffset: Double
     ): List<PointF> {
         val angle = 2 * Math.PI / 5
         val points = List(5) { i ->
@@ -305,15 +304,13 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         inversion: Float
     ) {
         if (start == end) {
-            // Draw a loop (arc) for the same start and end points
-            val loopRadius = 70f // Adjust the loop radius as needed
+            val loopRadius = 70f
             val left = start.x - loopRadius
             val top = start.y - loopRadius
             val right = start.x + loopRadius
             val bottom = start.y + loopRadius
             val oval = RectF(left, top, right, bottom)
 
-            // Draw the arc (loop)
             canvas.drawArc(oval, 0f, 270f, false, paint)
         } else {
             val angle = atan2((end.y - start.y), (end.x - start.x))
@@ -325,10 +322,8 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
             val endX = end.x - offset * cos(angle) + separationX * inversion
             val endY = end.y - offset * sin(angle) + separationY * inversion
 
-//        Log.d("ARROW:","SeparationX:$separationX")
             canvas.drawLine(startX, startY, endX, endY, paint)
 
-            // Draw the arrow head
             val arrowAngle1 = angle + arrowAngle
             val arrowAngle2 = angle - arrowAngle
             canvas.drawLine(
@@ -346,11 +341,17 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
         }
     }
 
+    interface AnimationCallback {
+        fun onAnimationStart()
+        fun onAnimationEnd()
+    }
 
-    fun startArrowAnimation(path: String, duration: Long) {
+    fun startArrowAnimation(path: String, duration: Long, callback: AnimationCallback) {
         animateBitmap = true
         val animations = mutableListOf<Animator>()
         var totalDuration: Long = 0
+
+        val bitmapList = bitmapList.take(numVertices)
 
         for (vertex in 0 until numVertices) {
             var startVertexIndex = vertex
@@ -390,22 +391,28 @@ class GraphView (context: Context, attrs: AttributeSet?) : View(context, attrs) 
                 startVertexIndex = endVertexIndex
                 totalDuration += duration
 
-//                Log.d("DEBUG", "Animating bitmap${imageIndex + 1} from (${startVertex.x}, ${startVertex.y}) to (${endVertex.x}, ${endVertex.y})")
-
             }
         }
         val finalAnimatorSet = AnimatorSet()
         finalAnimatorSet.playSequentially(animations)
         finalAnimatorSet.start()
 
+        finalAnimatorSet.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                callback.onAnimationStart()
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                callback.onAnimationEnd()
+            }
+            })
+
         totalDuration += 1000L
-        // Reset the bitmaps' positions after the animation ends
+
         Handler(Looper.getMainLooper()).postDelayed({
             animateBitmap = false
-            // Reset bitmap positions to (0,0)
             bitmapPositions.forEachIndexed { index, pointF ->
                 pointF.set(0f, 0f)
-                // Clear animation values
                 val propertyNameX = "bitmap${index + 1}X"
                 val propertyNameY = "bitmap${index + 1}Y"
                 ObjectAnimator.ofFloat(this, propertyNameX, pointF.x).start()

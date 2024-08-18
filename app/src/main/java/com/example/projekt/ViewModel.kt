@@ -13,21 +13,10 @@ class ViewModel : ViewModel() {
     private val graphsRed: MutableList<List<Pair<Int, Int>>> = mutableListOf()
     private val graphsBlue: MutableList<List<Pair<Int, Int>>> = mutableListOf()
     private var currentLevel = 0
-    private var currentStage = 1
     private var loop = false
     private var numberLoopsRed = 0
     private var numberLoopsBlue = 0
-    private var coin = 0
-    var stages = 1
 
-//    var graphs = listOf(listOf(Pair(0,1), Pair(1,2), Pair(2,0)),
-//        listOf(Pair(0,2), Pair(1,0), Pair(2,1)))
-//
-//    private var graphsLoop = listOf(listOf(Pair(0,0), Pair(1,2), Pair(2,1)),
-//        listOf(Pair(0,2), Pair(1,1), Pair(2,0)),
-//        listOf(Pair(0,1), Pair(1,0), Pair(2,2)))
-
-//    private val vertices = listOf('A', 'B', 'C', 'D', 'E')
     private var numberOfVertices = 3
 
     var redArrowPoints = listOf(Pair(0,1), Pair(1,2), Pair(2,0))
@@ -136,11 +125,6 @@ class ViewModel : ViewModel() {
         return currentLevel
     }
 
-    fun nextStage() : Int {
-        stages += 1
-        return stages
-    }
-
     fun getCommand(): String {
         return commands[currentLevel]
     }
@@ -168,17 +152,10 @@ class ViewModel : ViewModel() {
     private var resultVerify = mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices).toMutableList()
 
     fun verify(answers: List<Int>): Boolean {
-
         val result =
             mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices).toMutableList()
         val command = getCommand().toList()
 
-//        Log.d("LOGIKA", "Red: $redArrowPoints")
-//        Log.d("LOGIKA", "Blue: $blueArrowPoints")
-        Log.d("DEBUG", "Result: $result")
-        Log.d("DEBUG", "Command: $command")
-
-        // command sa nemeni
         for (c in command) {
             if (c == 'M') {
                 for (i in result.indices) {
@@ -200,9 +177,7 @@ class ViewModel : ViewModel() {
 
         resultVerify = result
 
-        Log.d("DEBUG", "Result finished: $result")
         val answersCorrect = answers.take(numberOfVertices)
-        Log.d("ANSWER", "Answer finished: $answersCorrect")
         for (i in answersCorrect.indices) {
             if (answersCorrect[i]-1 != result[i].second) return false
         }
@@ -210,28 +185,13 @@ class ViewModel : ViewModel() {
         return true
     }
 
-    //toto mi dáva lines, teda na level 2 tie buttony vyplnené
     @RequiresApi(Build.VERSION_CODES.N)
-    fun verify2() : MutableList<Pair<Int,Int>> {
-        var expectedSize = 3
-
-//        if (answers.size == 4) {
-//            expectedSize = 4
-//        }
-//        if (answers.size == 5) {
-//            expectedSize = 5
-//        }
+    fun verify() : MutableList<Pair<Int,Int>> {
 
         val result =
-            mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(expectedSize).toMutableList()
+            mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices).toMutableList()
         val command = getCommand().toList()
 
-//        Log.d("LOGIKA", "Red: $redArrowPoints")
-//        Log.d("LOGIKA", "Blue: $blueArrowPoints")
-        Log.d("DEBUG", "Result: $result")
-        Log.d("DEBUG", "Command: $command")
-
-        // command sa nemeni
         for (c in command) {
             if (c == 'M') {
                 for (i in result.indices) {
@@ -250,18 +210,14 @@ class ViewModel : ViewModel() {
                 }
             }
         }
-        return result
 
-//        result = mutableListOf(Pair(0,0), Pair(1,1), Pair(2,2))
+        return result
     }
 
-    // toto kontroluje daný príkaz, či sedí s tým, čo je v buttonoch
     @RequiresApi(Build.VERSION_CODES.N)
-    fun verify3(answer0:Int, answer1:Int, answer2:Int, command:List<Char>) : Boolean {
-        var result = mutableListOf(Pair(0,0), Pair(1,1), Pair(2,2))
-//        val command = getCommand().toList()
-//        length = command.size
-        Log.d("DEBUG", "$command") //[M]
+    fun verify(answers: List<Int>, command:List<Char>): Boolean {
+        val result =
+            mutableListOf(Pair(0, 0), Pair(1, 1), Pair(2, 2), Pair(3, 3), Pair(4,4)).take(numberOfVertices).toMutableList()
 
         for (c in command) {
             if (c == 'M') {
@@ -282,17 +238,12 @@ class ViewModel : ViewModel() {
             }
         }
 
-//        Log.d("DEBUG", "$result")
-        Log.d("DEBUG", "$answer0, $answer1, $answer2") //[1,2,0]
-        Log.d("DEBUG", "$result") //[(0, 1), (1, 2), (2, 0)]
+        val answersCorrect = answers.take(numberOfVertices)
+        for (i in answersCorrect.indices) {
+            if (answersCorrect[i] != result[i].second) return false
+        }
 
-        if (answer0 != result[0].second) return false
-        if (answer1 != result[1].second) return false
-        if (answer2 != result[2].second) return false
-
-        result = mutableListOf(Pair(0,0), Pair(1,1), Pair(2,2))
         return true
     }
-
 
 }

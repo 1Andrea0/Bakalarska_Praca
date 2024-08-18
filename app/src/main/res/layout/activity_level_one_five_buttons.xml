@@ -58,20 +58,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guidelineV" />
 
-    <ImageView
-        android:id="@+id/red_x"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:srcCompat="@drawable/red_x"
-        android:adjustViewBounds="true"
-        android:maxWidth="50dp"
-        android:maxHeight="50dp"
-        android:layout_marginTop="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guidelineV" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -110,7 +96,8 @@
         app:layout_constraintEnd_toStartOf="@+id/button5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline3"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:enabled="false" />
 
     <Button
         android:id="@+id/button5"
@@ -124,7 +111,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button"
         app:layout_constraintTop_toBottomOf="@+id/guideline3"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:enabled="false" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -134,7 +122,6 @@
         app:layout_constraintGuide_percent="0.65" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
@@ -147,37 +134,61 @@
             android:id="@+id/button9"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_weight="1"
-            android:enabled="false"
             android:insetLeft="10dp"
             android:insetRight="3dp"
             android:text="A"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:enabled="false" />
 
         <Button
             android:id="@+id/button8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_weight="1"
-            android:enabled="false"
             android:insetLeft="3dp"
             android:insetRight="3dp"
             android:text="B"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:enabled="false" />
 
         <Button
             android:id="@+id/button10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_weight="1"
-            android:enabled="false"
             android:insetLeft="3dp"
             android:insetRight="6dp"
             android:text="C"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/button15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:insetLeft="3dp"
+            android:insetRight="6dp"
+            android:text="D"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/button17"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:insetLeft="3dp"
+            android:insetRight="6dp"
+            android:text="E"
+            android:enabled="false" />
 
     </LinearLayout>
 
@@ -190,6 +201,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline7">
 
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/arrow_down"
+            android:adjustViewBounds="true"
+            android:layout_weight="1"
+            android:insetLeft="10dp"
+            android:insetRight="3dp"
+            android:maxWidth="80dp"
+            android:maxHeight="80dp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/arrow_down"
+            android:adjustViewBounds="true"
+            android:layout_weight="1"
+            android:insetLeft="10dp"
+            android:insetRight="3dp"
+            android:maxWidth="80dp"
+            android:maxHeight="80dp" />
 
         <ImageView
             android:layout_width="0dp"
@@ -244,8 +277,7 @@
             android:insetRight="3dp"
             android:text=""
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:enabled="false" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button12"
@@ -256,8 +288,7 @@
             android:layout_weight="1"
             android:insetLeft="3dp"
             android:insetRight="3dp"
-            android:text=""
-            android:enabled="false" />
+            android:text="" />
 
         <Button
             android:id="@+id/button13"
@@ -268,8 +299,29 @@
             android:layout_weight="1"
             android:insetLeft="3dp"
             android:insetRight="6dp"
-            android:text=""
-            android:enabled="false" />
+            android:text="" />
+
+        <Button
+            android:id="@+id/button14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:insetLeft="3dp"
+            android:insetRight="6dp"
+            android:text="@string/empty" />
+
+        <Button
+            android:id="@+id/button18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:insetLeft="3dp"
+            android:insetRight="6dp"
+            android:text="@string/empty" />
 
     </LinearLayout>
 
